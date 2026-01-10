@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import logo from './assets/Logo.png';
-import Products from './Products';
+import Products from './products';
 import Cart from './Cart';
 import Checkout from './Checkout';
 import { Routes, Route, Link } from 'react-router-dom';
