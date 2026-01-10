@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { products } from "./products"; // ✅ Importamos los datos correctamente
 
-function Products({ addToCart }) {
+function Products({ products, addToCart }) {
   // Función con animación al añadir al carrito
   const handleAddToCart = (product, e) => {
     addToCart(product);
