@@ -1,42 +1,81 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* ====== Estilos generales ====== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111; /* fondo elegante oscuro */
+  color: #fff;
+}
+
+/* ====== Barra superior (Header/Navbar) ====== */
+header {
+  background-color: #111; /* color oscuro */
+  height: 120px; /* barra más alta */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 2px solid #333; /* línea sutil */
+}
+
+header img {
+  height: 80px; /* logo más grande */
+}
+
+header h1 {
+  font-size: 2.5rem; /* nombre más grande */
+  margin-left: 20px;
+  color: #fff;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: #FFD700; /* dorado elegante */
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #FFC107; /* dorado más brillante al pasar el mouse */
+  text-decoration: underline;
+}
+
+/* ====== Sección de inicio ====== */
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 120px); /* ocupa toda la pantalla menos la barra */
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.home-logo {
+  height: 150px; /* logo más grande en inicio */
+  margin-bottom: 20px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.home h1 {
+  font-size: 3rem;
+  margin: 0;
+  color: #fff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.home .slogan {
+  font-size: 1.5rem;
+  color: #ccc;
+  margin-top: 10px;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* ====== Footer ====== */
+footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 2px solid #333;
+  font-size: 0.9rem;
+  color: #aaa;
 }

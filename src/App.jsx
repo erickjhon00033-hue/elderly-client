@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import logo from './assets/Logo.png';
+import logo from './assets/Logo.png'; // asegúrate que esté en minúsculas
 import Products from './products';
 import Cart from './Cart';
 import Checkout from './Checkout';
 import { Routes, Route, Link } from 'react-router-dom';
+import './App.css'; // importamos los estilos
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -38,54 +39,20 @@ function App() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#111',
-        minHeight: '100vh',
-        color: '#eee',
-        display: 'flex',
-        flexDirection: 'column'
-      }}
-    >
+    <div className="app">
       {/* Header */}
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '20px',
-          backgroundColor: '#222',
-          borderBottom: '2px solid #444'
-        }}
-      >
+      <header>
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <img src={logo} alt="Logo Elderly" style={{ height: '60px' }} />
+          <img src={logo} alt="Logo Elderly" />
           <div>
-            <h1 style={{ margin: 0 }}>Elderly</h1>
-            <p style={{ fontStyle: 'italic', color: '#aaa', margin: 0 }}>
-              La elegancia no envejece
-            </p>
+            <h1>Elderly</h1>
+            <p className="slogan">La elegancia no envejece</p>
           </div>
         </div>
         <nav>
-          <Link
-            to="/"
-            style={{ color: '#eee', marginRight: '20px', textDecoration: 'none' }}
-          >
-            Inicio
-          </Link>
-          <Link
-            to="/cart"
-            style={{ color: '#eee', marginRight: '20px', textDecoration: 'none' }}
-          >
-            Carrito ({cart.length})
-          </Link>
-          <Link
-            to="/checkout"
-            style={{ color: '#0f0', textDecoration: 'none' }}
-          >
-            Checkout
-          </Link>
+          <Link to="/">Inicio</Link>
+          <Link to="/cart">Carrito ({cart.length})</Link>
+          <Link to="/checkout">Checkout</Link>
         </nav>
       </header>
 
@@ -94,11 +61,12 @@ function App() {
         <Route
           path="/"
           element={
-            <main style={{ flex: 1, padding: '20px' }}>
-              <h2 style={{ color: '#ccc' }}>Bienvenido a la tienda Elderly</h2>
-              <p style={{ color: '#aaa' }}>
-                Explora nuestros productos artesanales únicos.
-              </p>
+            <main className="home">
+              <img src={logo} alt="Logo Elderly" className="home-logo" />
+              <h1>Elderly</h1>
+              <p className="slogan">La elegancia no envejece</p>
+              <h2>Bienvenido a la tienda Elderly</h2>
+              <p>Explora nuestros productos artesanales únicos.</p>
               <Products addToCart={addToCart} />
             </main>
           }
@@ -127,16 +95,7 @@ function App() {
       </Routes>
 
       {/* Footer */}
-      <footer
-        style={{
-          marginTop: 'auto',
-          padding: '15px',
-          textAlign: 'center',
-          backgroundColor: '#222',
-          borderTop: '2px solid #444',
-          color: '#888'
-        }}
-      >
+      <footer>
         <small>
           © {new Date().getFullYear()} Elderly — La elegancia no envejece
         </small>
