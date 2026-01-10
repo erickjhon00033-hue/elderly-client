@@ -37,12 +37,15 @@ function Products({ addToCart }) {
   const handleAddToCart = (product, e) => {
     addToCart(product);
 
+    // Seleccionamos la imagen del producto
     const img = e.target.closest('.product-card').querySelector('img');
     const clone = img.cloneNode(true);
     clone.classList.add('fly-to-cart');
     document.body.appendChild(clone);
 
+    // Posiciones inicial y final
     const cartIcon = document.querySelector('.mini-cart');
+    if (!cartIcon) return; // seguridad
     const cartRect = cartIcon.getBoundingClientRect();
     const imgRect = img.getBoundingClientRect();
 
@@ -51,8 +54,9 @@ function Products({ addToCart }) {
     clone.style.top = imgRect.top + 'px';
     clone.style.width = imgRect.width + 'px';
     clone.style.height = imgRect.height + 'px';
-    clone.style.transition = 'all 1s ease';
+    clone.style.transition = 'all 0.8s ease';
 
+    // Forzamos reflow para que la transición se aplique
     requestAnimationFrame(() => {
       clone.style.left = cartRect.left + 'px';
       clone.style.top = cartRect.top + 'px';
@@ -61,7 +65,8 @@ function Products({ addToCart }) {
       clone.style.opacity = '0';
     });
 
-    setTimeout(() => clone.remove(), 1000);
+    // Eliminamos el clon después de la animación
+    setTimeout(() => clone.remove(), 900);
   };
 
   return (
