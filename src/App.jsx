@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import logo from './assets/Logo.png'; // asegúrate que esté en minúsculas
-import Products from './products';
+import logo from './assets/logo.png'; // asegúrate que el archivo esté en minúsculas
+import Products from './Products';
 import Cart from './Cart';
 import Checkout from './Checkout';
-import { Routes, Route, Link } from 'react-router-dom';
-import './App.css'; // importamos los estilos
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import './App.css';
 
 function App() {
   const [cart, setCart] = useState([]);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   // Agregar producto al carrito
   const addToCart = (product) => {
@@ -41,15 +43,16 @@ function App() {
   return (
     <div className="app">
       {/* Header */}
-      <header>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+      <header className={isHome ? 'header header--home' : 'header'}>
+        <div className="header-brand">
           <img src={logo} alt="Logo Elderly" />
           <div>
             <h1>Elderly</h1>
             <p className="slogan">La elegancia no envejece</p>
           </div>
         </div>
-        <nav>
+
+        <nav className="header-nav">
           <Link to="/">Inicio</Link>
           <Link to="/cart">Carrito ({cart.length})</Link>
           <Link to="/checkout">Checkout</Link>
@@ -61,10 +64,7 @@ function App() {
         <Route
           path="/"
           element={
-            <main className="home">
-              <img src={logo} alt="Logo Elderly" className="home-logo" />
-              <h1>Elderly</h1>
-              <p className="slogan">La elegancia no envejece</p>
+            <main className="home-content">
               <h2>Bienvenido a la tienda Elderly</h2>
               <p>Explora nuestros productos artesanales únicos.</p>
               <Products addToCart={addToCart} />
@@ -96,9 +96,7 @@ function App() {
 
       {/* Footer */}
       <footer>
-        <small>
-          © {new Date().getFullYear()} Elderly — La elegancia no envejece
-        </small>
+        <small>© {new Date().getFullYear()} Elderly — La elegancia no envejece</small>
       </footer>
     </div>
   );

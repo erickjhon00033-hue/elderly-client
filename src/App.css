@@ -1,77 +1,75 @@
-/* ====== Estilos generales ====== */
+/* Generales */
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #111; /* fondo elegante oscuro */
+  background-color: #111;
   color: #fff;
 }
 
-/* ====== Barra superior (Header/Navbar) ====== */
-header {
-  background-color: #111; /* color oscuro */
-  height: 120px; /* barra más alta */
+/* Header */
+header.header {
+  background-color: #222;           /* barra gris oscuro */
+  height: 120px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;   /* por defecto: marca a la izquierda, nav a la derecha */
   padding: 0 40px;
-  border-bottom: 2px solid #333; /* línea sutil */
+  border-bottom: 2px solid #444;
 }
 
-header img {
-  height: 80px; /* logo más grande */
+/* Variante centrada en Inicio */
+header.header--home {
+  justify-content: center;          /* centra el contenido dentro de la barra */
+  gap: 40px;                        /* espacio entre marca y nav si se muestran juntos */
 }
 
-header h1 {
-  font-size: 2.5rem; /* nombre más grande */
-  margin-left: 20px;
+/* Bloque de marca */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-brand img {
+  height: 80px;
+}
+
+.header-brand h1 {
+  margin: 0;
+  font-size: 2.5rem;
   color: #fff;
 }
 
-nav {
+.slogan {
+  margin: 0;
+  font-style: italic;
+  color: #aaa;
+}
+
+/* Navegación */
+.header-nav {
   display: flex;
   gap: 20px;
 }
 
-nav a {
-  color: #FFD700; /* dorado elegante */
+.header-nav a {
+  color: #FFD700;      /* dorado elegante */
   text-decoration: none;
   font-size: 1.2rem;
   transition: color 0.3s ease;
 }
 
-nav a:hover {
-  color: #FFC107; /* dorado más brillante al pasar el mouse */
+.header-nav a:hover {
+  color: #FFC107;      /* dorado más brillante */
   text-decoration: underline;
 }
 
-/* ====== Sección de inicio ====== */
-.home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 120px); /* ocupa toda la pantalla menos la barra */
-  text-align: center;
+/* Contenido de inicio (sin duplicar la marca aquí) */
+.home-content {
+  padding: 20px;
 }
 
-.home-logo {
-  height: 150px; /* logo más grande en inicio */
-  margin-bottom: 20px;
-}
-
-.home h1 {
-  font-size: 3rem;
-  margin: 0;
-  color: #fff;
-}
-
-.home .slogan {
-  font-size: 1.5rem;
-  color: #ccc;
-  margin-top: 10px;
-}
-
-/* ====== Footer ====== */
+/* Footer */
 footer {
   text-align: center;
   padding: 20px;
