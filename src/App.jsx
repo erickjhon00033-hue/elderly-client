@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import logo from "./assets/Logo.png";
-import Products from "./products";
+import Products from "./Products"; // ✅ componente
 import Cart from "./Cart";
 import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
 import Categories from "./Categories";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
-import { products } from "./products"; // Importamos catálogo desde products.js
+import { products } from "./products"; // ✅ datos (named export)
 
 function App() {
   const [cart, setCart] = useState([]);
