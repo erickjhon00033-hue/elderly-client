@@ -7,7 +7,7 @@ import ProductDetail from "./ProductDetail";
 import Categories from "./Categories";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
-import { products } from "./products"; // ✅ datos (named export)
+import { products } from "./product"; // ✅ datos (named export)
 
 function App() {
   const [cart, setCart] = useState([]);
