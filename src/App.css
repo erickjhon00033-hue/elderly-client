@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #111; /* fondo elegante oscuro */
+  background-color: #111;
   color: #fff;
 }
 
@@ -58,15 +58,10 @@ header.header {
   margin: 0;
   font-style: italic;
   color: #aaa;
-  transition: color 0.3s ease;
   animation: glowText 3s ease-in-out infinite alternate;
 }
 
-.slogan:hover {
-  color: #FFD700;
-}
-
-/* Navegación a la derecha */
+/* Navegación */
 .header-nav--right {
   position: absolute;
   right: 40px;
@@ -87,6 +82,39 @@ header.header {
   color: #FFC107;
   text-decoration: underline;
   transform: translateY(-2px);
+}
+
+/* ====== Mini‑carrito ====== */
+.mini-cart {
+  position: relative;
+}
+
+.mini-cart-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 30px;
+  background: #222;
+  border: 1px solid #FFD700;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 200px;
+  z-index: 10;
+}
+
+.mini-cart:hover .mini-cart-dropdown {
+  display: block;
+}
+
+.mini-cart-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mini-cart-dropdown li {
+  font-size: 0.9rem;
+  margin: 5px 0;
 }
 
 /* ====== Contenido de inicio ====== */
@@ -157,7 +185,7 @@ header.header {
   padding: 20px;
   text-align: center;
   transition: opacity 0.4s ease;
-  text-decoration: none; /* quita subrayado */
+  text-decoration: none;
 }
 
 .product-card:hover .overlay {
@@ -183,14 +211,6 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Separadores */
-.section-divider {
-  border-top: 1px solid #FFD700;
-  margin: 40px auto;
-  width: 60%;
-  opacity: 0.5;
-}
-
 /* ====== Product Detail ====== */
 .product-detail {
   padding: 40px;
@@ -203,6 +223,27 @@ button:hover {
   max-width: 100%;
   border-radius: 12px;
   margin-bottom: 20px;
+}
+
+.gallery {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.gallery .thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 1px solid #FFD700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gallery .thumb:hover {
+  transform: scale(1.1);
 }
 
 .product-detail h2 {
@@ -251,14 +292,49 @@ button:hover {
   text-align: center;
 }
 
+/* ====== Checkout ====== */
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.checkout-form input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #FFD700;
+  background: #111;
+  color: #FFD700;
+}
+
 /* ====== Footer ====== */
 footer {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
   border-top: 2px solid #333;
-  font-size: 0.9rem;
+  background: #1a1a1a;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.footer-links h4 {
+  color: #FFD700;
+  margin-bottom: 10px;
+}
+
+.footer-links a {
   color: #aaa;
-  animation: fadeIn 1.5s ease forwards;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #FFD700;
 }
 
 /* ====== Animaciones ====== */
@@ -283,71 +359,3 @@ footer {
 }
 
 /* ====== Responsive Design ====== */
-
-/* Celulares */
-@media (max-width: 600px) {
-  header.header {
-    flex-direction: column;
-    height: auto;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .header-brand {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .header-brand img {
-    height: 60px;
-  }
-
-  .header-nav--right {
-    position: static;
-    transform: none;
-    margin-top: 15px;
-    justify-content: center;
-  }
-
-  .products-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 20px;
-  }
-
-  button {
-    width: 100%;
-  }
-}
-
-/* Tablets */
-@media (min-width: 601px) and (max-width: 1024px) {
-  header.header {
-    flex-direction: column;
-    height: auto;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .header-brand img {
-    height: 70px;
-  }
-
-  .header-nav--right {
-    position: static;
-    transform: none;
-    margin-top: 10px;
-    justify-content: center;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 25px;
-    padding: 30px;
-  }
-}
-
-/* PC */
-@media (min-width: 1025px) {
-  .products-grid {
-    grid-template-columns: repeat(auto-fit,

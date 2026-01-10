@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from './assets/Logo.png'; // asegúrate que el archivo esté en minúsculas
+import logo from './assets/Logo.png';
 import Products from './products';
 import Cart from './Cart';
 import Checkout from './Checkout';
@@ -12,7 +12,7 @@ function App() {
   const location = useLocation();
   const isHome = location.pathname === '/';
 
-  // Lista de productos compartida con ProductDetail
+  // Catálogo ficticio (luego reemplazas con productos reales o API)
   const products = [
     {
       id: 1,
@@ -22,7 +22,12 @@ function App() {
       description: 'Un delicado collar inspirado en la diosa celta de la luna y las estrellas.',
       features: ['Diseño artesanal', 'Acabado elegante', 'Edición limitada'],
       materials: ['Plata 925', 'Cristales Swarovski'],
-      stock: 10
+      stock: 10,
+      gallery: [
+        '/assets/collar-arianrhod.jpg',
+        '/assets/collar-arianrhod2.jpg',
+        '/assets/collar-arianrhod3.jpg'
+      ]
     },
     {
       id: 2,
@@ -32,7 +37,8 @@ function App() {
       description: 'Anillo artesanal que evoca la fuerza y belleza de la diosa nórdica Freyja.',
       features: ['Resistente al desgaste', 'Diseño único'],
       materials: ['Oro rosa', 'Cuarzo rosa'],
-      stock: 5
+      stock: 5,
+      gallery: ['/assets/anillo-freyja.jpg']
     },
     {
       id: 3,
@@ -42,7 +48,8 @@ function App() {
       description: 'Pulsera ligera inspirada en Hermes, símbolo de movimiento y comunicación.',
       features: ['Ajustable', 'Estilo minimalista'],
       materials: ['Cuero genuino', 'Acero inoxidable'],
-      stock: 8
+      stock: 8,
+      gallery: ['/assets/pulsera-hermes.jpg']
     },
     {
       id: 4,
@@ -52,11 +59,12 @@ function App() {
       description: 'Broche elegante que representa la sabiduría y la estrategia de Atenea.',
       features: ['Diseño clásico', 'Ideal para ocasiones formales'],
       materials: ['Bronce pulido', 'Esmalte artístico'],
-      stock: 12
+      stock: 12,
+      gallery: ['/assets/broche-atenea.jpg']
     }
   ];
 
-  // Agregar producto al carrito
+  // Lógica de carrito
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
@@ -72,17 +80,14 @@ function App() {
     });
   };
 
-  // Quitar producto
   const removeFromCart = (id) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
   };
 
-  // Vaciar carrito
   const clearCart = () => {
     setCart([]);
   };
 
-  // Calcular total
   const getTotal = () => {
     return cart.reduce((sum, item) => sum + item.price_cents * item.quantity, 0) / 100;
   };
@@ -91,7 +96,6 @@ function App() {
     <div className="app">
       {/* Header */}
       <header className={isHome ? 'header header--home' : 'header'}>
-        {/* Marca centrada con logo clickeable */}
         <div className="header-brand">
           <Link to="/">
             <img src={logo} alt="Logo Elderly" />
@@ -102,10 +106,25 @@ function App() {
           </div>
         </div>
 
-        {/* Navegación a la derecha */}
+        {/* Navegación con mini‑carrito */}
         <nav className="header-nav header-nav--right">
           <Link to="/">Inicio</Link>
-          <Link to="/cart">Carrito ({cart.length})</Link>
+          <div className="mini-cart">
+            <Link to="/cart">🛒 ({cart.length})</Link>
+            <div className="mini-cart-dropdown">
+              {cart.length === 0 ? (
+                <p>Carrito vacío</p>
+              ) : (
+                <ul>
+                  {cart.map((item) => (
+                    <li key={item.id}>
+                      {item.name} x{item.quantity}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
           <Link to="/checkout">Checkout</Link>
         </nav>
       </header>
@@ -154,8 +173,27 @@ function App() {
         />
       </Routes>
 
-      {/* Footer */}
+      {/* Footer completo */}
       <footer>
+        <div className="footer-links">
+          <div>
+            <h4>Contacto</h4>
+            <p>Email: contacto@elderly.com</p>
+            <p>Tel: +1 809 000 0000</p>
+          </div>
+          <div>
+            <h4>Redes</h4>
+            <p><a href="#">Instagram</a></p>
+            <p><a href="#">Facebook</a></p>
+            <p><a href="#">TikTok</a></p>
+          </div>
+          <div>
+            <h4>Políticas</h4>
+            <p><a href="#">Envíos</a></p>
+            <p><a href="#">Devoluciones</a></p>
+            <p><a href="#">Privacidad</a></p>
+          </div>
+        </div>
         <small>© {new Date().getFullYear()} Elderly — La elegancia no envejece</small>
       </footer>
     </div>
