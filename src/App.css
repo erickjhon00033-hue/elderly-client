@@ -366,41 +366,6 @@ button:hover {
   transform: scale(1.1);
 }
 
-.product-detail h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.product-detail .price {
-  font-size: 1.2rem;
-  color: #FFD700;
-  margin-bottom: 20px;
-}
-
-.product-detail details {
-  margin: 15px 0;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: left;
-}
-
-.product-detail summary {
-  cursor: pointer;
-  font-weight: bold;
-  color: #FFD700;
-}
-
-.product-detail ul {
-  margin: 10px 0;
-  padding-left: 20px;
-}
-
-.order-section {
-  margin: 20px 0;
-}
-
 .order-section input {
   width: 60px;
   margin-left: 10px;
@@ -411,6 +376,7 @@ button:hover {
   color: #FFD700;
   text-align: center;
 }
+
 
 /* ====== Checkout ====== */
 .checkout-form {
