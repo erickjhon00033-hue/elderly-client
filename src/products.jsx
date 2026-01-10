@@ -49,7 +49,7 @@ function Products({ addToCart }) {
     <div className="products-grid">
       {products.map((product) => (
         <div key={product.id} className="product-card">
-          {/* Enlace a la página de detalle */}
+          {/* Imagen y nombre clickeables */}
           <Link to={`/product/${product.id}`}>
             <img src={product.img} alt={product.name} />
             <h3>{product.name}</h3>
@@ -58,10 +58,10 @@ function Products({ addToCart }) {
           <p>Precio: ${product.price_cents / 100}</p>
           <button onClick={() => addToCart(product)}>Añadir al carrito</button>
 
-          {/* Overlay narrativo */}
-          <div className="overlay">
+          {/* Overlay narrativo también clickeable */}
+          <Link to={`/product/${product.id}`} className="overlay">
             {product.description}
-          </div>
+          </Link>
         </div>
       ))}
     </div>

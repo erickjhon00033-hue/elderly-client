@@ -10,22 +10,21 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  animation: fadeIn 1s ease forwards; /* animación al cargar */
+  animation: fadeIn 1s ease forwards;
 }
 
 /* ====== Header ====== */
 header.header {
-  background-color: #222;           /* barra gris oscuro */
+  background-color: #222;
   height: 120px;
   display: flex;
   align-items: center;
-  justify-content: center;          /* centra la marca */
-  position: relative;               /* permite posicionar nav */
+  justify-content: center;
+  position: relative;
   border-bottom: 2px solid #444;
-  animation: slideDown 0.8s ease forwards; /* animación al aparecer */
+  animation: slideDown 0.8s ease forwards;
 }
 
-/* Marca centrada */
 .header-brand {
   display: flex;
   align-items: center;
@@ -38,7 +37,7 @@ header.header {
 }
 
 .header-brand img:hover {
-  transform: scale(1.1); /* efecto zoom al pasar el mouse */
+  transform: scale(1.1);
 }
 
 .header-brand h1 {
@@ -70,24 +69,24 @@ header.header {
 /* Navegación a la derecha */
 .header-nav--right {
   position: absolute;
-  right: 40px;                      /* esquina derecha */
+  right: 40px;
   top: 50%;
-  transform: translateY(-50%);      /* centrado vertical */
+  transform: translateY(-50%);
   display: flex;
   gap: 20px;
 }
 
 .header-nav--right a {
-  color: #FFD700;                   /* dorado elegante */
+  color: #FFD700;
   text-decoration: none;
   font-size: 1.2rem;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .header-nav--right a:hover {
-  color: #FFC107;                   /* dorado más brillante */
+  color: #FFC107;
   text-decoration: underline;
-  transform: translateY(-2px);      /* efecto sutil de elevación */
+  transform: translateY(-2px);
 }
 
 /* ====== Contenido de inicio ====== */
@@ -108,7 +107,7 @@ header.header {
   margin-bottom: 20px;
 }
 
-/* ====== Tarjetas de producto con overlay narrativo ====== */
+/* ====== Tarjetas de producto ====== */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -122,7 +121,7 @@ header.header {
   border-radius: 12px;
   padding: 20px;
   text-align: center;
-  position: relative; /* necesario para overlay */
+  position: relative;
   overflow: hidden;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   animation: fadeInUp 0.8s ease forwards;
@@ -145,7 +144,7 @@ header.header {
   filter: brightness(1.2);
 }
 
-/* Overlay narrativo */
+/* Overlay narrativo como Link */
 .product-card .overlay {
   position: absolute;
   inset: 0;
@@ -158,6 +157,7 @@ header.header {
   padding: 20px;
   text-align: center;
   transition: opacity 0.4s ease;
+  text-decoration: none; /* quita subrayado */
 }
 
 .product-card:hover .overlay {
@@ -183,12 +183,72 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Separadores elegantes */
+/* Separadores */
 .section-divider {
   border-top: 1px solid #FFD700;
   margin: 40px auto;
   width: 60%;
   opacity: 0.5;
+}
+
+/* ====== Product Detail ====== */
+.product-detail {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.product-detail .detail-image {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.product-detail h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.product-detail .price {
+  font-size: 1.2rem;
+  color: #FFD700;
+  margin-bottom: 20px;
+}
+
+.product-detail details {
+  margin: 15px 0;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: left;
+}
+
+.product-detail summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #FFD700;
+}
+
+.product-detail ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.order-section {
+  margin: 20px 0;
+}
+
+.order-section input {
+  width: 60px;
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #FFD700;
+  background: #111;
+  color: #FFD700;
+  text-align: center;
 }
 
 /* ====== Footer ====== */
@@ -224,7 +284,7 @@ footer {
 
 /* ====== Responsive Design ====== */
 
-/* Celulares (pantallas pequeñas) */
+/* Celulares */
 @media (max-width: 600px) {
   header.header {
     flex-direction: column;
@@ -239,36 +299,28 @@ footer {
   }
 
   .header-brand img {
-    height: 60px; /* logo más pequeño */
+    height: 60px;
   }
 
   .header-nav--right {
-    position: static; /* ya no flotante */
+    position: static;
     transform: none;
     margin-top: 15px;
     justify-content: center;
   }
 
-  .header-nav--right a {
-    font-size: 1rem;
-  }
-
   .products-grid {
-    grid-template-columns: 1fr; /* una columna */
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 20px;
   }
 
-  .product-card {
-    padding: 15px;
-  }
-
   button {
-    width: 100%; /* botones ocupan todo el ancho */
+    width: 100%;
   }
 }
 
-/* Tablets (pantallas medianas) */
+/* Tablets */
 @media (min-width: 601px) and (max-width: 1024px) {
   header.header {
     flex-direction: column;
@@ -293,17 +345,9 @@ footer {
     gap: 25px;
     padding: 30px;
   }
-
-  .product-card {
-    padding: 18px;
-  }
 }
 
-/* PC (pantallas grandes) */
+/* PC */
 @media (min-width: 1025px) {
   .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    padding: 40px;
-  }
-}
+    grid-template-columns: repeat(auto-fit,
