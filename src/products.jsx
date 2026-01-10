@@ -37,15 +37,13 @@ function Products({ addToCart }) {
   const handleAddToCart = (product, e) => {
     addToCart(product);
 
-    // Seleccionamos la imagen del producto
     const img = e.target.closest('.product-card').querySelector('img');
     const clone = img.cloneNode(true);
     clone.classList.add('fly-to-cart');
     document.body.appendChild(clone);
 
-    // Posiciones inicial y final
     const cartIcon = document.querySelector('.mini-cart');
-    if (!cartIcon) return; // seguridad
+    if (!cartIcon) return;
     const cartRect = cartIcon.getBoundingClientRect();
     const imgRect = img.getBoundingClientRect();
 
@@ -56,7 +54,6 @@ function Products({ addToCart }) {
     clone.style.height = imgRect.height + 'px';
     clone.style.transition = 'all 0.8s ease';
 
-    // Forzamos reflow para que la transición se aplique
     requestAnimationFrame(() => {
       clone.style.left = cartRect.left + 'px';
       clone.style.top = cartRect.top + 'px';
@@ -65,7 +62,6 @@ function Products({ addToCart }) {
       clone.style.opacity = '0';
     });
 
-    // Eliminamos el clon después de la animación
     setTimeout(() => clone.remove(), 900);
   };
 
@@ -73,21 +69,21 @@ function Products({ addToCart }) {
     <div className="products-grid">
       {products.map((product) => (
         <div key={product.id} className="product-card">
-          {/* Imagen y nombre clickeables */}
-          <Link to={`/product/${product.id}`}>
-            <img src={product.img} alt={product.name} />
-            <h3>{product.name}</h3>
-          </Link>
+          {/* Imagen con overlay narrativo */}
+          <div className="image-container">
+            <Link to={`/product/${product.id}`}>
+              <img src={product.img} alt={product.name} />
+            </Link>
+            <Link to={`/product/${product.id}`} className="overlay">
+              {product.description}
+            </Link>
+          </div>
 
+          <h3>{product.name}</h3>
           <p>Precio: ${product.price_cents / 100}</p>
           <button onClick={(e) => handleAddToCart(product, e)}>
             Añadir al carrito
           </button>
-
-          {/* Overlay narrativo también clickeable */}
-          <Link to={`/product/${product.id}`} className="overlay">
-            {product.description}
-          </Link>
         </div>
       ))}
     </div>
