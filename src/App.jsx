@@ -12,7 +12,7 @@ function App() {
   const location = useLocation();
   const isHome = location.pathname === '/';
 
-  // Catálogo ficticio (luego reemplazas con productos reales o API)
+  // Catálogo ficticio con detalles completos
   const products = [
     {
       id: 1,
@@ -80,6 +80,14 @@ function App() {
     });
   };
 
+  const updateQuantity = (id, newQty) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id ? { ...item, quantity: newQty } : item
+      )
+    );
+  };
+
   const removeFromCart = (id) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
   };
@@ -110,7 +118,7 @@ function App() {
         <nav className="header-nav header-nav--right">
           <Link to="/">Inicio</Link>
           <div className="mini-cart">
-            <Link to="/cart">🛒 ({cart.length})</Link>
+            <Link to="/cart">🛒 ({cart.reduce((sum, item) => sum + item.quantity, 0)})</Link>
             <div className="mini-cart-dropdown">
               {cart.length === 0 ? (
                 <p>Carrito vacío</p>
@@ -147,6 +155,7 @@ function App() {
             <Cart
               cart={cart}
               getTotal={getTotal}
+              updateQuantity={updateQuantity}
               removeFromCart={removeFromCart}
               clearCart={clearCart}
             />
@@ -173,7 +182,7 @@ function App() {
         />
       </Routes>
 
-      {/* Footer completo */}
+      {/* Footer */}
       <footer>
         <div className="footer-links">
           <div>

@@ -201,7 +201,110 @@ header.header {
 .image-container:hover .overlay {
   opacity: 1;
 }
+.cart {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
 
+.cart-list {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.cart-item-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 15px;
+}
+
+.cart-item-info h3 {
+  margin: 0;
+  color: #FFD700;
+}
+
+.cart-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.cart-controls input {
+  width: 60px;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #FFD700;
+  background: #111;
+  color: #FFD700;
+  text-align: center;
+}
+
+.remove-btn {
+  background: #dc3545;
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.remove-btn:hover {
+  background: #c82333;
+}
+
+.cart-total {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  text-align: right;
+  color: #FFD700;
+}
+
+.cart-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.clear-btn {
+  background: #900;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background: #700;
+}
+
+.checkout-btn {
+  background: #28a745;
+  border: none;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background: #218838;
+}
 /* Botones premium */
 button {
   background: transparent;
