@@ -42,7 +42,7 @@ function Cart({ cart, updateQuantity, removeFromCart, clearCart }) {
                       />
                     </label>
 
-                    <p>Subtotal: RD${item.price * item.quantity}</p>
+                    <p>Subtotal: RD${(item.price * item.quantity).toFixed(2)}</p>
 
                     <button
                       className="remove-btn"

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { products } from "./products"; // Importamos los datos
+import { products } from "./products"; // ✅ Importamos los datos correctamente
 
 function ProductDetail({ addToCart }) {
   const { id } = useParams();
@@ -13,7 +13,7 @@ function ProductDetail({ addToCart }) {
 
   // Estado para galería y cantidad
   const [selectedImage, setSelectedImage] = useState(
-    product.gallery ? product.gallery[0] : product.image
+    product.gallery && product.gallery.length > 0 ? product.gallery[0] : product.image
   );
   const [quantity, setQuantity] = useState(1);
 
@@ -55,7 +55,7 @@ function ProductDetail({ addToCart }) {
       <img src={selectedImage} alt={product.name} className="detail-image" />
 
       {/* Galería de imágenes */}
-      {product.gallery && (
+      {product.gallery && product.gallery.length > 1 && (
         <div className="gallery">
           {product.gallery.map((img, index) => (
             <img
@@ -75,7 +75,7 @@ function ProductDetail({ addToCart }) {
       <p>{product.description}</p>
 
       {/* Secciones expandibles */}
-      {product.features && (
+      {product.features && product.features.length > 0 && (
         <details>
           <summary>Características</summary>
           <ul>
@@ -86,7 +86,7 @@ function ProductDetail({ addToCart }) {
         </details>
       )}
 
-      {product.materials && (
+      {product.materials && product.materials.length > 0 && (
         <details>
           <summary>Materiales</summary>
           <ul>

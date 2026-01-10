@@ -71,7 +71,8 @@ Gracias por comprar en Elderly ✨`);
             <ul>
               {cart.map((item) => (
                 <li key={item.id}>
-                  {item.name} x{item.quantity} — RD${item.price * item.quantity}
+                  {item.name} x{item.quantity} — RD$
+                  {(item.price * item.quantity).toFixed(2)}
                 </li>
               ))}
             </ul>

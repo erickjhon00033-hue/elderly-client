@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Products from "./products"; // Importamos los datos desde products.js
+import { products } from "./products"; // ✅ Importamos los datos correctamente
 
 function Products({ addToCart }) {
   // Función con animación al añadir al carrito
@@ -55,7 +55,9 @@ function Products({ addToCart }) {
           <p>Stock: {product.stock}</p>
 
           {/* Badges de marketing */}
-          {product.bestseller && <span className="badge bestseller">Más vendido</span>}
+          {product.bestseller && (
+            <span className="badge bestseller">Más vendido</span>
+          )}
           {product.newArrival && <span className="badge new">Nuevo</span>}
 
           <button onClick={(e) => handleAddToCart(product, e)}>
