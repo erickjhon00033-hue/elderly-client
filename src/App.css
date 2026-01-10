@@ -1,29 +1,29 @@
-/* Generales */
+/* ====== Estilos generales ====== */
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #111;
+  background-color: #111; /* fondo elegante oscuro */
   color: #fff;
 }
 
-/* Header */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ====== Header ====== */
 header.header {
   background-color: #222;           /* barra gris oscuro */
   height: 120px;
   display: flex;
   align-items: center;
-  justify-content: space-between;   /* por defecto: marca a la izquierda, nav a la derecha */
-  padding: 0 40px;
+  justify-content: center;          /* centra la marca */
+  position: relative;               /* permite posicionar nav */
   border-bottom: 2px solid #444;
 }
 
-/* Variante centrada en Inicio */
-header.header--home {
-  justify-content: center;          /* centra el contenido dentro de la barra */
-  gap: 40px;                        /* espacio entre marca y nav si se muestran juntos */
-}
-
-/* Bloque de marca */
+/* Marca centrada */
 .header-brand {
   display: flex;
   align-items: center;
@@ -46,30 +46,35 @@ header.header--home {
   color: #aaa;
 }
 
-/* Navegación */
-.header-nav {
+/* Navegación a la derecha */
+.header-nav--right {
+  position: absolute;
+  right: 40px;                      /* esquina derecha */
+  top: 50%;
+  transform: translateY(-50%);      /* centrado vertical */
   display: flex;
   gap: 20px;
 }
 
-.header-nav a {
-  color: #FFD700;      /* dorado elegante */
+.header-nav--right a {
+  color: #FFD700;                   /* dorado elegante */
   text-decoration: none;
   font-size: 1.2rem;
   transition: color 0.3s ease;
 }
 
-.header-nav a:hover {
-  color: #FFC107;      /* dorado más brillante */
+.header-nav--right a:hover {
+  color: #FFC107;                   /* dorado más brillante */
   text-decoration: underline;
 }
 
-/* Contenido de inicio (sin duplicar la marca aquí) */
+/* ====== Contenido de inicio ====== */
 .home-content {
+  flex: 1;
   padding: 20px;
 }
 
-/* Footer */
+/* ====== Footer ====== */
 footer {
   text-align: center;
   padding: 20px;
