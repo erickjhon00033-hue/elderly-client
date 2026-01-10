@@ -44,9 +44,11 @@ function App() {
     <div className="app">
       {/* Header */}
       <header className={isHome ? 'header header--home' : 'header'}>
-        {/* Marca centrada */}
+        {/* Marca centrada con logo clickeable */}
         <div className="header-brand">
-          <img src={logo} alt="Logo Elderly" />
+          <Link to="/">
+            <img src={logo} alt="Logo Elderly" />
+          </Link>
           <div>
             <h1>Elderly</h1>
             <p className="slogan">La elegancia no envejece</p>
