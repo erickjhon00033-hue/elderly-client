@@ -9,9 +9,6 @@ function Products({ addToCart }) {
       price_cents: 12000,
       img: '/assets/collar-arianrhod.jpg',
       description: 'Un delicado collar inspirado en la diosa celta de la luna y las estrellas.',
-      features: ['Diseño artesanal', 'Acabado elegante', 'Edición limitada'],
-      materials: ['Plata 925', 'Cristales Swarovski'],
-      stock: 10
     },
     {
       id: 2,
@@ -19,9 +16,6 @@ function Products({ addToCart }) {
       price_cents: 9500,
       img: '/assets/anillo-freyja.jpg',
       description: 'Anillo artesanal que evoca la fuerza y belleza de la diosa nórdica Freyja.',
-      features: ['Resistente al desgaste', 'Diseño único'],
-      materials: ['Oro rosa', 'Cuarzo rosa'],
-      stock: 5
     },
     {
       id: 3,
@@ -29,9 +23,6 @@ function Products({ addToCart }) {
       price_cents: 8000,
       img: '/assets/pulsera-hermes.jpg',
       description: 'Pulsera ligera inspirada en Hermes, símbolo de movimiento y comunicación.',
-      features: ['Ajustable', 'Estilo minimalista'],
-      materials: ['Cuero genuino', 'Acero inoxidable'],
-      stock: 8
     },
     {
       id: 4,
@@ -39,11 +30,39 @@ function Products({ addToCart }) {
       price_cents: 10500,
       img: '/assets/broche-atenea.jpg',
       description: 'Broche elegante que representa la sabiduría y la estrategia de Atenea.',
-      features: ['Diseño clásico', 'Ideal para ocasiones formales'],
-      materials: ['Bronce pulido', 'Esmalte artístico'],
-      stock: 12
     }
   ];
+
+  // Función con animación
+  const handleAddToCart = (product, e) => {
+    addToCart(product);
+
+    const img = e.target.closest('.product-card').querySelector('img');
+    const clone = img.cloneNode(true);
+    clone.classList.add('fly-to-cart');
+    document.body.appendChild(clone);
+
+    const cartIcon = document.querySelector('.mini-cart');
+    const cartRect = cartIcon.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+
+    clone.style.position = 'fixed';
+    clone.style.left = imgRect.left + 'px';
+    clone.style.top = imgRect.top + 'px';
+    clone.style.width = imgRect.width + 'px';
+    clone.style.height = imgRect.height + 'px';
+    clone.style.transition = 'all 1s ease';
+
+    requestAnimationFrame(() => {
+      clone.style.left = cartRect.left + 'px';
+      clone.style.top = cartRect.top + 'px';
+      clone.style.width = '30px';
+      clone.style.height = '30px';
+      clone.style.opacity = '0';
+    });
+
+    setTimeout(() => clone.remove(), 1000);
+  };
 
   return (
     <div className="products-grid">
@@ -56,7 +75,9 @@ function Products({ addToCart }) {
           </Link>
 
           <p>Precio: ${product.price_cents / 100}</p>
-          <button onClick={() => addToCart(product)}>Añadir al carrito</button>
+          <button onClick={(e) => handleAddToCart(product, e)}>
+            Añadir al carrito
+          </button>
 
           {/* Overlay narrativo también clickeable */}
           <Link to={`/product/${product.id}`} className="overlay">

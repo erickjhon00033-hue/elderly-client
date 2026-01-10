@@ -211,6 +211,12 @@ button:hover {
   transform: scale(1.05);
 }
 
+/* Animación de producto volando */
+.fly-to-cart {
+  z-index: 9999;
+  pointer-events: none;
+}
+
 /* ====== Product Detail ====== */
 .product-detail {
   padding: 40px;
@@ -301,12 +307,28 @@ button:hover {
   margin: 0 auto;
 }
 
-.checkout-form input {
+.checkout-form input,
+.checkout-form textarea,
+.checkout-form select {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #FFD700;
   background: #111;
   color: #FFD700;
+}
+
+.checkout-summary {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.checkout-summary ul {
+  list-style: none;
+  padding: 0;
+}
+
+.checkout-summary li {
+  margin: 5px 0;
 }
 
 /* ====== Footer ====== */
@@ -359,3 +381,73 @@ footer {
 }
 
 /* ====== Responsive Design ====== */
+
+/* Celulares */
+@media (max-width: 600px) {
+  header.header {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .header-brand {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header-brand img {
+    height: 60px;
+  }
+
+  .header-nav--right {
+    position: static;
+    transform: none;
+    margin-top: 15px;
+    justify-content: center;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+/* Tablets */
+@media (min-width: 601px) and (max-width: 1024px) {
+  header.header {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .header-brand img {
+    height: 70px;
+  }
+
+  .header-nav--right {
+    position: static;
+    transform: none;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    padding: 30px;
+  }
+}
+
+/* PC */
+@media (min-width: 1025px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
