@@ -10,7 +10,7 @@ function ProductDetail({ products, addToCart }) {
 
   return (
     <div className="product-detail">
-      <img src={product.img} alt={product.name} />
+      <img src={product.img} alt={product.name} className="detail-image" />
       <h2>{product.name}</h2>
       <p className="price">Precio: ${product.price_cents / 100}</p>
 
