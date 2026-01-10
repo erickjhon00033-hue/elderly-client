@@ -60,6 +60,7 @@ header.header {
   font-style: italic;
   color: #aaa;
   transition: color 0.3s ease;
+  animation: glowText 3s ease-in-out infinite alternate;
 }
 
 .slogan:hover {
@@ -108,6 +109,13 @@ header.header {
 }
 
 /* ====== Tarjetas de producto con overlay narrativo ====== */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 40px;
+}
+
 .product-card {
   background-color: #1a1a1a;
   border: 1px solid #333;
@@ -156,7 +164,7 @@ header.header {
   opacity: 1;
 }
 
-/* Botones */
+/* Botones premium */
 button {
   background: transparent;
   border: 2px solid #FFD700;
@@ -173,6 +181,14 @@ button:hover {
   color: #111;
   box-shadow: 0 0 15px #FFD700;
   transform: scale(1.05);
+}
+
+/* Separadores elegantes */
+.section-divider {
+  border-top: 1px solid #FFD700;
+  margin: 40px auto;
+  width: 60%;
+  opacity: 0.5;
 }
 
 /* ====== Footer ====== */
@@ -199,4 +215,9 @@ footer {
 @keyframes slideDown {
   from { transform: translateY(-100%); }
   to { transform: translateY(0); }
+}
+
+@keyframes glowText {
+  from { color: #aaa; text-shadow: none; }
+  to { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
 }

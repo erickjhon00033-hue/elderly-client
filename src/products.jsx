@@ -1,64 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 function Products({ addToCart }) {
-  const [products, setProducts] = useState([]);
-
-  // Cargar productos desde el backend
-  useEffect(() => {
-    fetch('http://localhost:4000/api/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error('Error al cargar productos:', err));
-  }, []);
+  const products = [
+    {
+      id: 1,
+      name: 'Collar de Arianrhod',
+      price_cents: 12000,
+      img: '/assets/collar-arianrhod.jpg',
+      description: 'Un delicado collar inspirado en la diosa celta de la luna y las estrellas.'
+    },
+    {
+      id: 2,
+      name: 'Anillo de Freyja',
+      price_cents: 9500,
+      img: '/assets/anillo-freyja.jpg',
+      description: 'Anillo artesanal que evoca la fuerza y belleza de la diosa nórdica Freyja.'
+    },
+    {
+      id: 3,
+      name: 'Pulsera de Hermes',
+      price_cents: 8000,
+      img: '/assets/pulsera-hermes.jpg',
+      description: 'Pulsera ligera inspirada en Hermes, símbolo de movimiento y comunicación.'
+    },
+    {
+      id: 4,
+      name: 'Broche de Atenea',
+      price_cents: 10500,
+      img: '/assets/broche-atenea.jpg',
+      description: 'Broche elegante que representa la sabiduría y la estrategia de Atenea.'
+    }
+  ];
 
   return (
-    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+    <div className="products-grid">
       {products.map((product) => (
-        <div
-          key={product.id}
-          style={{
-            backgroundColor: '#222',
-            padding: '15px',
-            borderRadius: '8px',
-            width: '250px',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.4)'
-          }}
-        >
-          {/* Imagen del producto */}
-          <img
-            src={product.image_url}
-            alt={product.name}
-            style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
-          />
+        <div key={product.id} className="product-card">
+          <img src={product.img} alt={product.name} />
+          <h3>{product.name}</h3>
+          <p>Precio: ${product.price_cents / 100}</p>
+          <button onClick={() => addToCart(product)}>Añadir al carrito</button>
 
-          {/* Nombre */}
-          <h3 style={{ color: '#eee', marginBottom: '5px' }}>{product.name}</h3>
-
-          {/* Descripción */}
-          <p style={{ color: '#aaa', fontSize: '14px', marginBottom: '10px' }}>
+          {/* Overlay narrativo */}
+          <div className="overlay">
             {product.description}
-          </p>
-
-          {/* Precio */}
-          <p style={{ color: '#ccc', fontWeight: 'bold', marginBottom: '10px' }}>
-            ${product.price_cents / 100}
-          </p>
-
-          {/* Botón agregar al carrito */}
-          <button
-            onClick={() => addToCart(product)}
-            style={{
-              padding: '10px',
-              backgroundColor: '#444',
-              color: '#eee',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              width: '100%'
-            }}
-          >
-            🛒 Agregar al carrito
-          </button>
+          </div>
         </div>
       ))}
     </div>
