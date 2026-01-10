@@ -24,10 +24,10 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
     .filter((p) => (priceFilter > 0 ? p.price <= priceFilter : true))
     .filter((p) => (stockFilter ? p.stock > 0 : true));
 
+  // Animación al añadir al carrito
   const handleAddToCart = (product, e) => {
     addToCart(product);
 
-    // Animación de volar al carrito
     const img = e.target.closest(".product-card").querySelector("img");
     const clone = img.cloneNode(true);
     clone.classList.add("fly-to-cart");
@@ -54,6 +54,20 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
     });
 
     setTimeout(() => clone.remove(), 900);
+  };
+
+  // Animación de corazones al añadir a favoritos
+  const showHeartEffect = (e) => {
+    const heart = document.createElement("div");
+    heart.className = "heart-float";
+    heart.textContent = "💖";
+
+    const rect = e.target.getBoundingClientRect();
+    heart.style.left = rect.left + rect.width / 2 + "px";
+    heart.style.top = rect.top + "px";
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
   };
 
   return (
@@ -115,7 +129,12 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
               <button onClick={(e) => handleAddToCart(product, e)}>
                 Añadir al carrito
               </button>
-              <button onClick={() => toggleWishlist(product)}>
+              <button
+                onClick={(e) => {
+                  toggleWishlist(product);
+                  showHeartEffect(e);
+                }}
+              >
                 {wishlist.find((item) => item.id === product.id)
                   ? "💖 Quitar de favoritos"
                   : "🤍 Añadir a favoritos"}

@@ -1,25 +1,23 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-function ProductDetail({ products, addToCart }) {
+function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
 
-  // Si no existe el producto
   if (!product) {
     return <p>Producto no encontrado</p>;
   }
 
-  // Estado para galería y cantidad
   const [selectedImage, setSelectedImage] = useState(
     product.gallery && product.gallery.length > 0 ? product.gallery[0] : product.image
   );
   const [quantity, setQuantity] = useState(1);
 
+  // Animación al añadir al carrito
   const handleAddToCart = (e) => {
     addToCart({ ...product, quantity });
 
-    // Animación de volar al carrito
     const img = e.target.closest(".product-detail").querySelector(".detail-image");
     const clone = img.cloneNode(true);
     clone.classList.add("fly-to-cart");
@@ -48,12 +46,26 @@ function ProductDetail({ products, addToCart }) {
     setTimeout(() => clone.remove(), 900);
   };
 
+  // Animación de corazones al añadir a favoritos
+  const showHeartEffect = (e) => {
+    const heart = document.createElement("div");
+    heart.className = "heart-float";
+    heart.textContent = "💖";
+
+    const rect = e.target.getBoundingClientRect();
+    heart.style.left = rect.left + rect.width / 2 + "px";
+    heart.style.top = rect.top + "px";
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  };
+
   return (
     <div className="product-detail">
       {/* Imagen principal */}
       <img src={selectedImage} alt={product.name} className="detail-image" />
 
-      {/* Galería de imágenes */}
+      {/* Galería */}
       {product.gallery && product.gallery.length > 1 && (
         <div className="gallery">
           {product.gallery.map((img, index) => (
@@ -68,7 +80,7 @@ function ProductDetail({ products, addToCart }) {
         </div>
       )}
 
-      {/* Información del producto */}
+      {/* Información */}
       <h2>{product.name}</h2>
       <p className="price">Precio: RD${product.price.toFixed(2)}</p>
       <p>{product.description}</p>
@@ -112,8 +124,18 @@ function ProductDetail({ products, addToCart }) {
         </label>
       </div>
 
-      {/* Botón de acción */}
+      {/* Botones */}
       <button onClick={handleAddToCart}>Añadir al carrito</button>
+      <button
+        onClick={(e) => {
+          toggleWishlist(product);
+          showHeartEffect(e);
+        }}
+      >
+        {wishlist.find((item) => item.id === product.id)
+          ? "💖 Quitar de favoritos"
+          : "🤍 Añadir a favoritos"}
+      </button>
     </div>
   );
 }

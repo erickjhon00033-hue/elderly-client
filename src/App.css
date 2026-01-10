@@ -602,3 +602,23 @@ footer {
   transform: translateY(-8px);
   background: #222;
 }
+/* ====== Animación de corazones ====== */
+.heart-float {
+  position: fixed;
+  font-size: 2rem;
+  color: #ff4d6d;
+  animation: floatUp 1s ease forwards;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100px) scale(1.5);
+  }
+}
