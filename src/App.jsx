@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import logo from './assets/logo.png'; // asegúrate que el archivo esté en minúsculas
-import Products from './Products';
+import logo from './assets/Logo.png'; // asegúrate que el archivo esté en minúsculas
+import Products from './products';
 import Cart from './Cart';
 import Checkout from './Checkout';
 import ProductDetail from './ProductDetail';
