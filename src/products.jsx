@@ -1,11 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function Products({ products, addToCart }) {
-  // Función con animación al añadir al carrito
+  const { category } = useParams(); // obtenemos la categoría desde la URL
+
+  // Filtramos productos según la categoría
+  const filteredProducts = category
+    ? products.filter((p) => p.category === category)
+    : products;
+
   const handleAddToCart = (product, e) => {
     addToCart(product);
 
+    // Animación de volar al carrito
     const img = e.target.closest(".product-card").querySelector("img");
     const clone = img.cloneNode(true);
     clone.classList.add("fly-to-cart");
@@ -36,34 +43,38 @@ function Products({ products, addToCart }) {
 
   return (
     <div className="products-grid">
-      {products.map((product) => (
-        <div key={product.id} className="product-card">
-          {/* Imagen con overlay narrativo */}
-          <div className="image-container">
-            <Link to={`/product/${product.id}`}>
-              <img src={product.image} alt={product.name} />
-            </Link>
-            <Link to={`/product/${product.id}`} className="overlay">
-              {product.description}
-            </Link>
+      {filteredProducts.length === 0 ? (
+        <p>No hay productos en esta categoría</p>
+      ) : (
+        filteredProducts.map((product) => (
+          <div key={product.id} className="product-card">
+            {/* Imagen con overlay narrativo */}
+            <div className="image-container">
+              <Link to={`/product/${product.id}`}>
+                <img src={product.image} alt={product.name} />
+              </Link>
+              <Link to={`/product/${product.id}`} className="overlay">
+                {product.description}
+              </Link>
+            </div>
+
+            <h3>{product.name}</h3>
+            <p>Precio: RD${product.price}</p>
+            <p>Material: {product.material}</p>
+            <p>Stock: {product.stock}</p>
+
+            {/* Badges de marketing */}
+            {product.bestseller && (
+              <span className="badge bestseller">Más vendido</span>
+            )}
+            {product.newArrival && <span className="badge new">Nuevo</span>}
+
+            <button onClick={(e) => handleAddToCart(product, e)}>
+              Añadir al carrito
+            </button>
           </div>
-
-          <h3>{product.name}</h3>
-          <p>Precio: RD${product.price}</p>
-          <p>Material: {product.material}</p>
-          <p>Stock: {product.stock}</p>
-
-          {/* Badges de marketing */}
-          {product.bestseller && (
-            <span className="badge bestseller">Más vendido</span>
-          )}
-          {product.newArrival && <span className="badge new">Nuevo</span>}
-
-          <button onClick={(e) => handleAddToCart(product, e)}>
-            Añadir al carrito
-          </button>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }

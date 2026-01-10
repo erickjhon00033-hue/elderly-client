@@ -97,6 +97,7 @@ function App() {
   const location = useLocation();
   const isHome = location.pathname === "/";
 
+  // Añadir producto al carrito
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
@@ -112,6 +113,7 @@ function App() {
     });
   };
 
+  // Actualizar cantidad
   const updateQuantity = (id, newQty) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -120,19 +122,23 @@ function App() {
     );
   };
 
+  // Eliminar producto
   const removeFromCart = (id) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
   };
 
+  // Vaciar carrito
   const clearCart = () => {
     setCart([]);
   };
 
+  // Calcular total
   const getTotal = () =>
     cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className="app">
+      {/* Header */}
       <header className={isHome ? "header header--home" : "header"}>
         <div className="header-brand">
           <Link to="/">
@@ -144,6 +150,7 @@ function App() {
           </div>
         </div>
 
+        {/* Navegación con mini‑carrito */}
         <nav className="header-nav header-nav--right">
           <Link to="/">Inicio</Link>
           <Link to="/collares">Collares</Link>
@@ -170,6 +177,7 @@ function App() {
         </nav>
       </header>
 
+      {/* Rutas */}
       <Routes>
         <Route
           path="/"
@@ -206,6 +214,7 @@ function App() {
         />
       </Routes>
 
+      {/* Footer */}
       <footer>
         <div className="footer-links">
           <div>
