@@ -1,7 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-function Cart({ cart, getTotal, updateQuantity, removeFromCart, clearCart }) {
+function Cart({ cart, updateQuantity, removeFromCart, clearCart }) {
+  // Calcular total directamente desde el carrito
+  const getTotal = () =>
+    cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
   return (
     <div className="cart">
       <h2>🛒 Tu Carrito</h2>
@@ -13,11 +17,16 @@ function Cart({ cart, getTotal, updateQuantity, removeFromCart, clearCart }) {
           <ul className="cart-list">
             {cart.map((item) => (
               <li key={item.id} className="cart-item">
-                <img src={item.img} alt={item.name} className="cart-item-img" />
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="cart-item-img"
+                />
 
                 <div className="cart-item-info">
                   <h3>{item.name}</h3>
-                  <p>Precio: ${item.price_cents / 100}</p>
+                  <p>Precio: RD${item.price}</p>
+                  <p>Material: {item.material}</p>
 
                   <div className="cart-controls">
                     <label>
@@ -25,6 +34,7 @@ function Cart({ cart, getTotal, updateQuantity, removeFromCart, clearCart }) {
                       <input
                         type="number"
                         min="1"
+                        max={item.stock}
                         value={item.quantity}
                         onChange={(e) =>
                           updateQuantity(item.id, parseInt(e.target.value))
@@ -32,9 +42,7 @@ function Cart({ cart, getTotal, updateQuantity, removeFromCart, clearCart }) {
                       />
                     </label>
 
-                    <p>
-                      Subtotal: ${(item.price_cents / 100) * item.quantity}
-                    </p>
+                    <p>Subtotal: RD${item.price * item.quantity}</p>
 
                     <button
                       className="remove-btn"
@@ -49,7 +57,7 @@ function Cart({ cart, getTotal, updateQuantity, removeFromCart, clearCart }) {
           </ul>
 
           <div className="cart-total">
-            <h3>Total: ${getTotal().toFixed(2)}</h3>
+            <h3>Total: RD${getTotal().toFixed(2)}</h3>
           </div>
 
           <div className="cart-actions">

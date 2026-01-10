@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-function Checkout({ cart, getTotal, clearCart }) {
+function Checkout({ cart, clearCart }) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    address: '',
-    paymentMethod: 'card',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCVV: ''
+    name: "",
+    email: "",
+    address: "",
+    paymentMethod: "card",
+    cardNumber: "",
+    cardExpiry: "",
+    cardCVV: ""
   });
+
+  // Calcular total
+  const getTotal = () =>
+    cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,37 +23,37 @@ function Checkout({ cart, getTotal, clearCart }) {
     e.preventDefault();
 
     if (cart.length === 0) {
-      alert('Tu carrito está vacío.');
+      alert("Tu carrito está vacío.");
       return;
     }
 
-    if (formData.paymentMethod === 'card') {
-      alert(`✅ Pago con tarjeta confirmado!\n
-Cliente: ${formData.name}\n
-Correo: ${formData.email}\n
-Dirección: ${formData.address}\n
-Tarjeta: **** **** **** ${formData.cardNumber.slice(-4)}\n
-Total: $${getTotal().toFixed(2)}\n
+    if (formData.paymentMethod === "card") {
+      alert(`✅ Pago con tarjeta confirmado!
+Cliente: ${formData.name}
+Correo: ${formData.email}
+Dirección: ${formData.address}
+Tarjeta: **** **** **** ${formData.cardNumber.slice(-4)}
+Total: RD$${getTotal().toFixed(2)}
 Gracias por comprar en Elderly ✨`);
     } else {
-      alert(`✅ Pago con PayPal confirmado!\n
-Cliente: ${formData.name}\n
-Correo: ${formData.email}\n
-Dirección: ${formData.address}\n
-Método: PayPal\n
-Total: $${getTotal().toFixed(2)}\n
+      alert(`✅ Pago con PayPal confirmado!
+Cliente: ${formData.name}
+Correo: ${formData.email}
+Dirección: ${formData.address}
+Método: PayPal
+Total: RD$${getTotal().toFixed(2)}
 Gracias por comprar en Elderly ✨`);
     }
 
     clearCart();
     setFormData({
-      name: '',
-      email: '',
-      address: '',
-      paymentMethod: 'card',
-      cardNumber: '',
-      cardExpiry: '',
-      cardCVV: ''
+      name: "",
+      email: "",
+      address: "",
+      paymentMethod: "card",
+      cardNumber: "",
+      cardExpiry: "",
+      cardCVV: ""
     });
   };
 
@@ -67,11 +71,13 @@ Gracias por comprar en Elderly ✨`);
             <ul>
               {cart.map((item) => (
                 <li key={item.id}>
-                  {item.name} x{item.quantity} — ${item.price_cents / 100}
+                  {item.name} x{item.quantity} — RD${item.price * item.quantity}
                 </li>
               ))}
             </ul>
-            <p><strong>Total: ${getTotal().toFixed(2)}</strong></p>
+            <p>
+              <strong>Total: RD${getTotal().toFixed(2)}</strong>
+            </p>
           </div>
 
           {/* Formulario */}
@@ -120,7 +126,7 @@ Gracias por comprar en Elderly ✨`);
               </select>
             </label>
 
-            {formData.paymentMethod === 'card' && (
+            {formData.paymentMethod === "card" && (
               <>
                 <label>
                   Número de tarjeta:
