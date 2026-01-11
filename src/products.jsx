@@ -8,10 +8,11 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
   const [materialFilter, setMaterialFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState(0);
   const [stockFilter, setStockFilter] = useState(false);
+  const [sortOption, setSortOption] = useState("");
 
   // Función de filtrado
-  const applyFilters = (list) =>
-    list
+  const applyFilters = (list) => {
+    let filtered = list
       .filter((p) =>
         searchTerm
           ? p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -23,6 +24,20 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
       )
       .filter((p) => (priceFilter > 0 ? p.price <= priceFilter : true))
       .filter((p) => (stockFilter ? p.stock > 0 : true));
+
+    // Ordenar según opción seleccionada
+    if (sortOption === "priceAsc") {
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (sortOption === "priceDesc") {
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+    } else if (sortOption === "bestseller") {
+      filtered = [...filtered].sort((a, b) => (b.bestseller ? 1 : -1));
+    } else if (sortOption === "newArrival") {
+      filtered = [...filtered].sort((a, b) => (b.newArrival ? 1 : -1));
+    }
+
+    return filtered;
+  };
 
   // Animación al añadir al carrito
   const handleAddToCart = (product, e) => {
@@ -167,6 +182,7 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
           </datalist>
         </label>
 
+        {/* Checkbox stock */}
         <label>
           <input
             type="checkbox"
@@ -175,6 +191,27 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
           />
           Solo en stock
         </label>
+
+        {/* Ordenar productos */}
+        <select onChange={(e) => setSortOption(e.target.value)}>
+          <option value="">Ordenar por...</option>
+          <option value="priceAsc">Precio: menor a mayor</option>
+          <option value="priceDesc">Precio: mayor a menor</option>
+          <option value="bestseller">Más vendidos</option>
+          <option value="newArrival">Novedades</option>
+        </select>
+
+        {/* Botón limpiar filtros */}
+        <button
+          onClick={() => {
+            setMaterialFilter("");
+            setPriceFilter(0);
+            setStockFilter(false);
+            setSortOption("");
+          }}
+        >
+          Limpiar filtros
+        </button>
       </div>
 
       {/* Mostrar productos */}
