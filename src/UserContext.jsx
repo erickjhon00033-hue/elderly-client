@@ -6,17 +6,32 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Recuperar usuario y token desde localStorage
     const savedUser = localStorage.getItem("user");
+    const savedToken = localStorage.getItem("token");
+
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const parsedUser = JSON.parse(savedUser);
+      setUser({ ...parsedUser, token: savedToken });
+    } else if (savedToken) {
+      // Si solo hay token guardado, mantenerlo en el estado
+      setUser({ email: null, token: savedToken });
     }
   }, []);
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
+      // Guardar usuario y token en localStorage
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ email: user.email })
+      );
+      if (user.token) {
+        localStorage.setItem("token", user.token);
+      }
     } else {
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
     }
   }, [user]);
 

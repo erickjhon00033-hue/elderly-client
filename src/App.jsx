@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import logo from "./assets/Logo.png";
 import Products from "./Products";
 import Cart from "./Cart";
@@ -6,118 +6,33 @@ import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
 import Categories from "./Categories";
 import Wishlist from "./Wishlist";
-import Login from "./Login"; 
+import Login from "./Login";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
-import { UserContext } from "./UserContext"; // 👈 importa el contexto
+import { UserContext } from "./UserContext";
 
-// ✅ Array de productos directamente aquí
-const products = [
-  {
-    id: 1,
-    name: "Collar Luna",
-    category: "collares",
-    price: 2500,
-    material: "Plata",
-    stock: 5,
-    image: "/assets/collar-luna.jpg",
-    description: "Un delicado collar inspirado en la luna y las estrellas.",
-    bestseller: true,
-    newArrival: false,
-  },
-  {
-    id: 2,
-    name: "Collar Sol",
-    category: "collares",
-    price: 3200,
-    material: "Oro",
-    stock: 3,
-    image: "/assets/collar-sol.jpg",
-    description: "Collar radiante inspirado en el sol.",
-    bestseller: false,
-    newArrival: true,
-  },
-  {
-    id: 3,
-    name: "Pulsera Estrella",
-    category: "pulseras",
-    price: 1800,
-    material: "Cuero",
-    stock: 10,
-    image: "/assets/pulsera-estrella.jpg",
-    description: "Pulsera ligera inspirada en las estrellas.",
-    bestseller: true,
-    newArrival: false,
-  },
-  {
-    id: 4,
-    name: "Pulsera Aurora",
-    category: "pulseras",
-    price: 2200,
-    material: "Acero inoxidable",
-    stock: 7,
-    image: "/assets/pulsera-aurora.jpg",
-    description: "Pulsera elegante inspirada en la aurora boreal.",
-    bestseller: false,
-    newArrival: true,
-  },
-];
+// 👉 Hooks conectados al backend
+import { useAuth } from "./hooks/useAuth";
+import { useCart } from "./hooks/useCart";
+import { useWishlist } from "./hooks/useWishlist";
+import { useProducts } from "./hooks/useProducts";
 
 function App() {
-  const [cart, setCart] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // 👇 aseguramos que el contexto existe
-  const userContext = useContext(UserContext);
-  const user = userContext?.user;
-  const setUser = userContext?.setUser;
+  // 🔑 Autenticación
+  const { user, login, logout } = useAuth();
 
-  // Añadir producto al carrito
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.id === product.id);
-      if (existing) {
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + (product.quantity || 1) }
-            : item
-        );
-      } else {
-        return [...prevCart, { ...product, quantity: product.quantity || 1 }];
-      }
-    });
-  };
+  // 🛒 Carrito
+  const { cart, loading: cartLoading, addToCart } = useCart();
 
-  // Wishlist toggle
-  const toggleWishlist = (product) => {
-    setWishlist((prev) =>
-      prev.find((item) => item.id === product.id)
-        ? prev.filter((item) => item.id !== product.id)
-        : [...prev, product]
-    );
-  };
+  // ❤️ Wishlist
+  const { wishlist, loading: wishlistLoading, toggleWishlist } = useWishlist();
 
-  // Actualizar cantidad
-  const updateQuantity = (id, newQty) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === id ? { ...item, quantity: newQty } : item
-      )
-    );
-  };
-
-  // Eliminar producto
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  // Vaciar carrito
-  const clearCart = () => {
-    setCart([]);
-  };
+  // 📦 Productos
+  const { products, loading: productsLoading } = useProducts();
 
   return (
     <div className="app">
@@ -133,7 +48,7 @@ function App() {
           </div>
         </div>
 
-        {/* Navegación con buscador y mini‑carrito */}
+        {/* Navegación */}
         <nav className="header-nav header-nav--right">
           <Link to="/">Inicio</Link>
           <Link to="/collares">Collares</Link>
@@ -143,10 +58,7 @@ function App() {
           {user ? (
             <>
               <span className="user-info">👤 {user.email}</span>
-              <button
-                onClick={() => setUser(null)}
-                className="logout-button"
-              >
+              <button onClick={logout} className="logout-button">
                 Cerrar sesión
               </button>
             </>
@@ -160,9 +72,11 @@ function App() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+
           <div className="mini-cart">
             <Link to="/cart">
-              🛒 ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+              🛒 (
+              {cart.reduce((sum, item) => sum + (item.quantity || 1), 0)})
             </Link>
           </div>
           <Link to="/checkout">Checkout</Link>
@@ -178,13 +92,17 @@ function App() {
               <h2>Bienvenido a la tienda Elderly</h2>
               <p>Explora nuestros productos artesanales únicos.</p>
               <Categories />
-              <Products
-                products={products}
-                addToCart={addToCart}
-                toggleWishlist={toggleWishlist}
-                wishlist={wishlist}
-                searchTerm={searchTerm}
-              />
+              {productsLoading ? (
+                <p>Cargando productos...</p>
+              ) : (
+                <Products
+                  products={products}
+                  addToCart={addToCart}
+                  toggleWishlist={toggleWishlist}
+                  wishlist={wishlist}
+                  searchTerm={searchTerm}
+                />
+              )}
             </main>
           }
         />
@@ -213,28 +131,35 @@ function App() {
             />
           }
         />
+
         <Route
           path="/cart"
           element={
-            <Cart
-              cart={cart}
-              updateQuantity={updateQuantity}
-              removeFromCart={removeFromCart}
-              clearCart={clearCart}
-            />
+            cartLoading ? (
+              <p>Cargando carrito...</p>
+            ) : (
+              <Cart cart={cart} clearCart={() => {}} />
+            )
           }
         />
+
         <Route
           path="/checkout"
-          element={<Checkout cart={cart} clearCart={clearCart} />}
+          element={<Checkout cart={cart} clearCart={() => {}} />}
         />
+
         <Route
           path="/wishlist"
           element={
-            <Wishlist wishlist={wishlist} toggleWishlist={toggleWishlist} />
+            wishlistLoading ? (
+              <p>Cargando favoritos...</p>
+            ) : (
+              <Wishlist wishlist={wishlist} toggleWishlist={toggleWishlist} />
+            )
           }
         />
-        <Route path="/login" element={<Login />} />
+
+        <Route path="/login" element={<Login login={login} />} />
       </Routes>
 
       {/* Footer */}

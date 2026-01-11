@@ -3,7 +3,7 @@ import { UserContext } from "./UserContext";
 
 function Login() {
   const userContext = useContext(UserContext);
-  const setUser = userContext?.setUser; // 👈 acceso seguro al contexto
+  const setUser = userContext?.setUser; // acceso seguro al contexto
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +18,15 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
+
       if (data.token && setUser) {
+        // Guardar token en localStorage
         localStorage.setItem("token", data.token);
+
+        // Actualizar contexto de usuario
         setUser({ email: data.user.email, token: data.token });
+
+        alert("✅ Sesión iniciada correctamente");
       } else {
         alert("Credenciales incorrectas");
       }
@@ -39,8 +45,9 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
+
       if (data.success) {
-        alert("Cuenta creada, ahora inicia sesión");
+        alert("✅ Cuenta creada, ahora inicia sesión");
         setShowRegister(false);
       } else {
         alert("Error al registrarse");

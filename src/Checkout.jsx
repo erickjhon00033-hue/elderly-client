@@ -8,12 +8,19 @@ function Checkout({ cart, clearCart }) {
     paymentMethod: "card",
     cardNumber: "",
     cardExpiry: "",
-    cardCVV: ""
+    cardCVV: "",
   });
+
+  // Helper para mostrar precio
+  const getPriceDisplay = (item) =>
+    ((item.price_cents || item.price * 100) / 100).toFixed(2);
 
   // Calcular total
   const getTotal = () =>
-    cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    cart.reduce(
+      (acc, item) => acc + parseFloat(getPriceDisplay(item)) * item.quantity,
+      0
+    );
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,7 +60,7 @@ Gracias por comprar en Elderly ✨`);
       paymentMethod: "card",
       cardNumber: "",
       cardExpiry: "",
-      cardCVV: ""
+      cardCVV: "",
     });
   };
 
@@ -70,9 +77,9 @@ Gracias por comprar en Elderly ✨`);
             <h3>Resumen de tu pedido:</h3>
             <ul>
               {cart.map((item) => (
-                <li key={item.id}>
+                <li key={item.product_id || item.id}>
                   {item.name} x{item.quantity} — RD$
-                  {(item.price * item.quantity).toFixed(2)}
+                  {(parseFloat(getPriceDisplay(item)) * item.quantity).toFixed(2)}
                 </li>
               ))}
             </ul>

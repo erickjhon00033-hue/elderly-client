@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { products } from "./Products";
+import { productsFallback } from "./Products"; // ✅ fallback local
 
-function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
+function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
   const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
+
+  // Usa productos de props (backend) o fallback local
+  const listSource =
+    Array.isArray(products) && products.length > 0 ? products : productsFallback;
+
+  const product = listSource.find((p) => p.id === parseInt(id));
 
   if (!product) {
     return <p>Producto no encontrado</p>;
   }
 
   const [selectedImage, setSelectedImage] = useState(
-    product.gallery && product.gallery.length > 0 ? product.gallery[0] : product.image
+    product.gallery && product.gallery.length > 0
+      ? product.gallery[0]
+      : product.image_url || product.image
   );
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const [reviews, setReviews] = useState([
     { user: "Ana", rating: 5, comment: "Hermoso producto, muy elegante." },
-    { user: "Carlos", rating: 4, comment: "Buena calidad, llegó rápido." }
+    { user: "Carlos", rating: 4, comment: "Buena calidad, llegó rápido." },
   ]);
   const [newReview, setNewReview] = useState({ rating: 0, comment: "" });
 
@@ -37,6 +44,12 @@ function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
 
   const renderStars = (rating) =>
     "⭐".repeat(rating) + "☆".repeat(5 - rating);
+
+  // Helper para mostrar precio
+  const getPriceDisplay = (p) =>
+    ((p.price_cents || p.price * 100) / 100).toFixed(2);
+
+  const isFavorite = wishlist.some((item) => item.product_id === product.id);
 
   return (
     <div className="product-detail">
@@ -60,13 +73,16 @@ function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
 
       {/* Información */}
       <h2>{product.name}</h2>
-      <p className="price">Precio: RD${product.price.toFixed(2)}</p>
+      <p className="price">Precio: RD${getPriceDisplay(product)}</p>
       <p>{product.description}</p>
 
       {/* Caja de tallas */}
       <label>
         Talla:
-        <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)}>
+        <select
+          value={selectedSize}
+          onChange={(e) => setSelectedSize(e.target.value)}
+        >
           <option value="">Selecciona una talla</option>
           <option value="S">S</option>
           <option value="M">M</option>
@@ -136,19 +152,17 @@ function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
       {/* Botones */}
       <button onClick={handleAddToCart}>Añadir al carrito</button>
       <button onClick={() => toggleWishlist(product)}>
-        {wishlist.find((item) => item.id === product.id)
-          ? "💖 Quitar de favoritos"
-          : "🤍 Añadir a favoritos"}
+        {isFavorite ? "💖 Quitar de favoritos" : "🤍 Añadir a favoritos"}
       </button>
 
-      {/* Reseñas separadas */}
+      {/* Reseñas */}
       <div
         style={{
           marginTop: "300px",
           borderTop: "1px solid #ddd",
           paddingTop: "180px",
           textAlign: "left",
-          maxWidth: "600px"
+          maxWidth: "600px",
         }}
       >
         <div className="reviews">
@@ -163,7 +177,12 @@ function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
           <h4>Deja tu reseña</h4>
           <select
             value={newReview.rating}
-            onChange={(e) => setNewReview({ ...newReview, rating: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setNewReview({
+                ...newReview,
+                rating: parseInt(e.target.value),
+              })
+            }
           >
             <option value="0">Selecciona estrellas</option>
             <option value="1">⭐</option>
@@ -175,7 +194,9 @@ function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
           <textarea
             placeholder="Escribe tu comentario..."
             value={newReview.comment}
-            onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+            onChange={(e) =>
+              setNewReview({ ...newReview, comment: e.target.value })
+            }
           />
           <button onClick={handleAddReview}>Enviar reseña</button>
         </div>

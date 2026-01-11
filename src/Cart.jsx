@@ -2,9 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Cart({ cart, updateQuantity, removeFromCart, clearCart }) {
-  // Calcular total directamente desde el carrito
+  // Helper para mostrar precio
+  const getPriceDisplay = (item) =>
+    ((item.price_cents || item.price * 100) / 100).toFixed(2);
+
+  // Calcular total
   const getTotal = () =>
-    cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    cart.reduce(
+      (acc, item) => acc + parseFloat(getPriceDisplay(item)) * item.quantity,
+      0
+    );
 
   return (
     <div className="cart">
@@ -16,16 +23,16 @@ function Cart({ cart, updateQuantity, removeFromCart, clearCart }) {
         <>
           <ul className="cart-list">
             {cart.map((item) => (
-              <li key={item.id} className="cart-item">
+              <li key={item.product_id || item.id} className="cart-item">
                 <img
-                  src={item.image}
+                  src={item.image_url || item.image}
                   alt={item.name}
                   className="cart-item-img"
                 />
 
                 <div className="cart-item-info">
                   <h3>{item.name}</h3>
-                  <p>Precio: RD${item.price}</p>
+                  <p>Precio: RD${getPriceDisplay(item)}</p>
                   <p>Material: {item.material}</p>
 
                   <div className="cart-controls">
@@ -37,16 +44,22 @@ function Cart({ cart, updateQuantity, removeFromCart, clearCart }) {
                         max={item.stock}
                         value={item.quantity}
                         onChange={(e) =>
-                          updateQuantity(item.id, parseInt(e.target.value))
+                          updateQuantity(
+                            item.product_id || item.id,
+                            parseInt(e.target.value)
+                          )
                         }
                       />
                     </label>
 
-                    <p>Subtotal: RD${(item.price * item.quantity).toFixed(2)}</p>
+                    <p>
+                      Subtotal: RD$
+                      {(parseFloat(getPriceDisplay(item)) * item.quantity).toFixed(2)}
+                    </p>
 
                     <button
                       className="remove-btn"
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.product_id || item.id)}
                     >
                       ❌ Quitar
                     </button>
