@@ -630,15 +630,10 @@ footer {
 }
 
 .accordion-header {
-  background: #f0f0f0;
-  padding: 12px 16px;
+  background: #f7f7f7;
+  padding: 10px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 15px;
-  transition: background 0.3s ease;
-  color: #333333; /* ✅ gris oscuro */
-}
-
+  font-weight: bold;
 }
 
 .accordion-content {
@@ -775,4 +770,161 @@ footer {
 
 .reviews button:hover {
   background: #555;
+}
+.header-nav--right a,
+.header-nav--right .mini-cart a {
+  font-size: 0.85rem;   /* 👈 reduce el tamaño de la fuente */
+  padding: 0.25rem 0.5rem; /* 👈 menos espacio alrededor */
+}
+
+.header-nav--right input[type="text"] {
+  font-size: 0.85rem;   /* 👈 buscador también más pequeño */
+  padding: 0.25rem 0.5rem;
+}
+.header-nav--right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;   /* 👈 reduce la separación entre los enlaces */
+}
+
+.header-nav--right a,
+.header-nav--right .mini-cart a {
+  font-size: 0.85rem;   /* 👈 tamaño más pequeño */
+  padding: 0.25rem 0.4rem; /* 👈 menos espacio interno */
+}
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form input {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.auth-form button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+/* --- Estilos del login con contraste --- */
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #ffffff; /* 👈 fondo blanco para contraste */
+  color: #222;         /* 👈 texto oscuro para que se vea */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* sombra suave */
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #222;           /* 👈 texto oscuro */
+  background: #f9f9f9;   /* 👈 fondo claro */
+}
+
+.auth-form button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #333;      /* 👈 botón oscuro */
+  color: #fff;           /* 👈 letras blancas */
+  border: none;
+  border-radius: 4px;
+}
+
+.auth-form button:hover {
+  background: #555;      /* 👈 hover más claro */
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #0066cc;        /* 👈 azul visible */
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #222;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #222;
+  background: #f9f9f9;
+}
+
+.auth-form button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+.auth-form button:hover {
+  background: #555;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #0066cc;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+.accordion-button,
+.accordion-header {
+  color: #000000 !important; /* 👈 negro sólido */
+  font-weight: 600;
 }

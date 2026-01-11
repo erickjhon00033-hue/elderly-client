@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import logo from "./assets/Logo.png";
 import Products from "./Products";
 import Cart from "./Cart";
@@ -6,8 +6,10 @@ import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
 import Categories from "./Categories";
 import Wishlist from "./Wishlist";
+import Login from "./Login"; 
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
+import { UserContext } from "./UserContext"; // 👈 importa el contexto
 
 // ✅ Array de productos directamente aquí
 const products = [
@@ -21,7 +23,7 @@ const products = [
     image: "/assets/collar-luna.jpg",
     description: "Un delicado collar inspirado en la luna y las estrellas.",
     bestseller: true,
-    newArrival: false
+    newArrival: false,
   },
   {
     id: 2,
@@ -33,7 +35,7 @@ const products = [
     image: "/assets/collar-sol.jpg",
     description: "Collar radiante inspirado en el sol.",
     bestseller: false,
-    newArrival: true
+    newArrival: true,
   },
   {
     id: 3,
@@ -45,7 +47,7 @@ const products = [
     image: "/assets/pulsera-estrella.jpg",
     description: "Pulsera ligera inspirada en las estrellas.",
     bestseller: true,
-    newArrival: false
+    newArrival: false,
   },
   {
     id: 4,
@@ -57,8 +59,8 @@ const products = [
     image: "/assets/pulsera-aurora.jpg",
     description: "Pulsera elegante inspirada en la aurora boreal.",
     bestseller: false,
-    newArrival: true
-  }
+    newArrival: true,
+  },
 ];
 
 function App() {
@@ -67,6 +69,11 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  // 👇 aseguramos que el contexto existe
+  const userContext = useContext(UserContext);
+  const user = userContext?.user;
+  const setUser = userContext?.setUser;
 
   // Añadir producto al carrito
   const addToCart = (product) => {
@@ -132,6 +139,21 @@ function App() {
           <Link to="/collares">Collares</Link>
           <Link to="/pulseras">Pulseras</Link>
           <Link to="/wishlist">Favoritos</Link>
+
+          {user ? (
+            <>
+              <span className="user-info">👤 {user.email}</span>
+              <button
+                onClick={() => setUser(null)}
+                className="logout-button"
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <Link to="/login">Login / Registro</Link>
+          )}
+
           <input
             type="text"
             placeholder="Buscar..."
@@ -149,7 +171,6 @@ function App() {
 
       {/* Rutas */}
       <Routes>
-        {/* Inicio: mostrar todos los productos */}
         <Route
           path="/"
           element={
@@ -168,7 +189,6 @@ function App() {
           }
         />
 
-        {/* Categorías: filtrados */}
         <Route
           path="/:category"
           element={
@@ -214,6 +234,7 @@ function App() {
             <Wishlist wishlist={wishlist} toggleWishlist={toggleWishlist} />
           }
         />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
       {/* Footer */}

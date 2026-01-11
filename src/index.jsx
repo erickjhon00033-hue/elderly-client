@@ -1,16 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './index.css'; // 👈 estilos globales
-import { BrowserRouter } from 'react-router-dom'; // 👈 nuevo para navegación
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./UserContext"; // 👈 importa el provider
 
-// Crear el root y renderizar la aplicación
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <UserProvider> {/* 👈 envuelve toda la app */}
+        <App />
+      </UserProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
