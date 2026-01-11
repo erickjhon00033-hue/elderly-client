@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { products } from "./Products";
 
-function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
+function ProductDetail({ addToCart, toggleWishlist, wishlist }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
 
@@ -13,52 +14,29 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
     product.gallery && product.gallery.length > 0 ? product.gallery[0] : product.image
   );
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [reviews, setReviews] = useState([
+    { user: "Ana", rating: 5, comment: "Hermoso producto, muy elegante." },
+    { user: "Carlos", rating: 4, comment: "Buena calidad, llegó rápido." }
+  ]);
+  const [newReview, setNewReview] = useState({ rating: 0, comment: "" });
 
-  // Animación al añadir al carrito
-  const handleAddToCart = (e) => {
-    addToCart({ ...product, quantity });
+  const [featuresOpen, setFeaturesOpen] = useState(false);
+  const [materialsOpen, setMaterialsOpen] = useState(false);
 
-    const img = e.target.closest(".product-detail").querySelector(".detail-image");
-    const clone = img.cloneNode(true);
-    clone.classList.add("fly-to-cart");
-    document.body.appendChild(clone);
-
-    const cartIcon = document.querySelector(".mini-cart");
-    if (!cartIcon) return;
-    const cartRect = cartIcon.getBoundingClientRect();
-    const imgRect = img.getBoundingClientRect();
-
-    clone.style.position = "fixed";
-    clone.style.left = imgRect.left + "px";
-    clone.style.top = imgRect.top + "px";
-    clone.style.width = imgRect.width + "px";
-    clone.style.height = imgRect.height + "px";
-    clone.style.transition = "all 0.8s ease";
-
-    requestAnimationFrame(() => {
-      clone.style.left = cartRect.left + "px";
-      clone.style.top = cartRect.top + "px";
-      clone.style.width = "30px";
-      clone.style.height = "30px";
-      clone.style.opacity = "0";
-    });
-
-    setTimeout(() => clone.remove(), 900);
+  const handleAddToCart = () => {
+    addToCart({ ...product, quantity, size: selectedSize });
   };
 
-  // Animación de corazones al añadir a favoritos
-  const showHeartEffect = (e) => {
-    const heart = document.createElement("div");
-    heart.className = "heart-float";
-    heart.textContent = "💖";
-
-    const rect = e.target.getBoundingClientRect();
-    heart.style.left = rect.left + rect.width / 2 + "px";
-    heart.style.top = rect.top + "px";
-
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 1000);
+  const handleAddReview = () => {
+    if (newReview.rating > 0 && newReview.comment.trim() !== "") {
+      setReviews([...reviews, { user: "Cliente", ...newReview }]);
+      setNewReview({ rating: 0, comment: "" });
+    }
   };
+
+  const renderStars = (rating) =>
+    "⭐".repeat(rating) + "☆".repeat(5 - rating);
 
   return (
     <div className="product-detail">
@@ -85,32 +63,63 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
       <p className="price">Precio: RD${product.price.toFixed(2)}</p>
       <p>{product.description}</p>
 
-      {/* Secciones expandibles */}
-      {product.features && product.features.length > 0 && (
-        <details>
-          <summary>Características</summary>
-          <ul>
-            {product.features.map((f, i) => (
-              <li key={i}>{f}</li>
-            ))}
-          </ul>
-        </details>
-      )}
+      {/* Caja de tallas */}
+      <label>
+        Talla:
+        <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)}>
+          <option value="">Selecciona una talla</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+        </select>
+      </label>
 
-      {product.materials && product.materials.length > 0 && (
-        <details>
-          <summary>Materiales</summary>
-          <ul>
-            {product.materials.map((m, i) => (
-              <li key={i}>{m}</li>
-            ))}
-          </ul>
-        </details>
-      )}
+      {/* Accordion de características */}
+      <div className={`accordion ${featuresOpen ? "open" : ""}`}>
+        <div
+          className="accordion-header"
+          onClick={() => setFeaturesOpen(!featuresOpen)}
+        >
+          {featuresOpen ? "➖ Características" : "➕ Características"}
+        </div>
+        <div className="accordion-content">
+          {product.features && product.features.length > 0 ? (
+            <ul>
+              {product.features.map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No hay características registradas.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Accordion de materiales */}
+      <div className={`accordion ${materialsOpen ? "open" : ""}`}>
+        <div
+          className="accordion-header"
+          onClick={() => setMaterialsOpen(!materialsOpen)}
+        >
+          {materialsOpen ? "➖ Materiales" : "➕ Materiales"}
+        </div>
+        <div className="accordion-content">
+          {product.materials && product.materials.length > 0 ? (
+            <ul>
+              {product.materials.map((m, i) => (
+                <li key={i}>{m}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No hay materiales registrados.</p>
+          )}
+        </div>
+      </div>
 
       <p>Stock disponible: {product.stock}</p>
 
-      {/* Selección de cantidad */}
+      {/* Cantidad */}
       <div className="order-section">
         <label>
           Cantidad:
@@ -126,16 +135,51 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
 
       {/* Botones */}
       <button onClick={handleAddToCart}>Añadir al carrito</button>
-      <button
-        onClick={(e) => {
-          toggleWishlist(product);
-          showHeartEffect(e);
-        }}
-      >
+      <button onClick={() => toggleWishlist(product)}>
         {wishlist.find((item) => item.id === product.id)
           ? "💖 Quitar de favoritos"
           : "🤍 Añadir a favoritos"}
       </button>
+
+      {/* Reseñas separadas */}
+      <div
+        style={{
+          marginTop: "300px",
+          borderTop: "1px solid #ddd",
+          paddingTop: "180px",
+          textAlign: "left",
+          maxWidth: "600px"
+        }}
+      >
+        <div className="reviews">
+          <h3>Opiniones de clientes</h3>
+          {reviews.map((r, i) => (
+            <div key={i} className="review">
+              <strong>{r.user}</strong> — {renderStars(r.rating)}
+              <p>{r.comment}</p>
+            </div>
+          ))}
+
+          <h4>Deja tu reseña</h4>
+          <select
+            value={newReview.rating}
+            onChange={(e) => setNewReview({ ...newReview, rating: parseInt(e.target.value) })}
+          >
+            <option value="0">Selecciona estrellas</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+          </select>
+          <textarea
+            placeholder="Escribe tu comentario..."
+            value={newReview.comment}
+            onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+          />
+          <button onClick={handleAddReview}>Enviar reseña</button>
+        </div>
+      </div>
     </div>
   );
 }

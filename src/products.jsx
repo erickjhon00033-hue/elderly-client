@@ -1,8 +1,47 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm }) {
+// Fallback: ejemplo de productos con gallery, features y materials
+export const products = [
+  {
+    id: 1,
+    category: "collares",
+    name: "Collar de Plata",
+    description: "Collar elegante hecho a mano.",
+    price: 2500,
+    stock: 10,
+    material: "Plata",
+    image: "/images/collar1.jpg",
+    gallery: [
+      "/images/collar1.jpg",
+      "/images/collar1_detalle.jpg",
+      "/images/collar1_modelo.jpg",
+    ],
+    features: ["Hecho a mano", "Diseño exclusivo", "Acabado brillante"],
+    materials: ["Plata 925", "Cadena ajustable"],
+    bestseller: true,
+  },
+  {
+    id: 2,
+    category: "pulseras",
+    name: "Pulsera de Cuero",
+    description: "Pulsera artesanal con detalles metálicos.",
+    price: 1800,
+    stock: 5,
+    material: "Cuero",
+    image: "/images/pulsera1.jpg",
+    gallery: ["/images/pulsera1.jpg", "/images/pulsera1_detalle.jpg"],
+    features: ["Ajustable", "Duradero", "Diseño unisex"],
+    materials: ["Cuero genuino", "Acero inoxidable"],
+    newArrival: true,
+  },
+];
+
+function Products({ products: productsProp, addToCart, toggleWishlist, wishlist, searchTerm }) {
   const { category } = useParams();
+
+  // Usa los productos de props si existen; si no, usa el fallback local
+  const listSource = Array.isArray(productsProp) && productsProp.length > 0 ? productsProp : products;
 
   // Estados de filtros
   const [materialFilter, setMaterialFilter] = useState("");
@@ -92,7 +131,6 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
       <p>No hay productos que coincidan con tu búsqueda/filtros</p>
     ) : (
       <>
-        {/* Mensaje dinámico de rango de precio y cantidad */}
         {priceFilter > 0 && (
           <p className="price-message">
             Mostrando {filtered.length} producto{filtered.length !== 1 ? "s" : ""} hasta RD${priceFilter}
@@ -155,7 +193,6 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
           <option value="Acero inoxidable">Acero inoxidable</option>
         </select>
 
-        {/* Filtro por precio con input y sugerencias */}
         <label>
           Precio máximo:
           <input
@@ -182,7 +219,6 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
           </datalist>
         </label>
 
-        {/* Checkbox stock */}
         <label>
           <input
             type="checkbox"
@@ -192,7 +228,6 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
           Solo en stock
         </label>
 
-        {/* Ordenar productos */}
         <select onChange={(e) => setSortOption(e.target.value)}>
           <option value="">Ordenar por...</option>
           <option value="priceAsc">Precio: menor a mayor</option>
@@ -201,7 +236,6 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
           <option value="newArrival">Novedades</option>
         </select>
 
-        {/* Botón limpiar filtros */}
         <button
           onClick={() => {
             setMaterialFilter("");
@@ -217,15 +251,15 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
       {/* Mostrar productos */}
       {category ? (
         // Vista de categoría
-        renderProducts(products.filter((p) => p.category === category))
+        renderProducts(listSource.filter((p) => p.category === category))
       ) : (
         // Vista de inicio: agrupados por categoría
         <>
           <h2>Collares</h2>
-          {renderProducts(products.filter((p) => p.category === "collares"))}
+          {renderProducts(listSource.filter((p) => p.category === "collares"))}
 
           <h2>Pulseras</h2>
-          {renderProducts(products.filter((p) => p.category === "pulseras"))}
+          {renderProducts(listSource.filter((p) => p.category === "pulseras"))}
         </>
       )}
     </div>
