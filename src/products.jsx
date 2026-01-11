@@ -9,20 +9,20 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
   const [priceFilter, setPriceFilter] = useState(0);
   const [stockFilter, setStockFilter] = useState(false);
 
-  // Filtrado general
-  const filteredProducts = products
-    .filter((p) => (category ? p.category === category : true))
-    .filter((p) =>
-      searchTerm
-        ? p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.description.toLowerCase().includes(searchTerm.toLowerCase())
-        : true
-    )
-    .filter((p) =>
-      materialFilter ? p.material.toLowerCase() === materialFilter.toLowerCase() : true
-    )
-    .filter((p) => (priceFilter > 0 ? p.price <= priceFilter : true))
-    .filter((p) => (stockFilter ? p.stock > 0 : true));
+  // Función de filtrado
+  const applyFilters = (list) =>
+    list
+      .filter((p) =>
+        searchTerm
+          ? p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.description.toLowerCase().includes(searchTerm.toLowerCase())
+          : true
+      )
+      .filter((p) =>
+        materialFilter ? p.material.toLowerCase() === materialFilter.toLowerCase() : true
+      )
+      .filter((p) => (priceFilter > 0 ? p.price <= priceFilter : true))
+      .filter((p) => (stockFilter ? p.stock > 0 : true));
 
   // Animación al añadir al carrito
   const handleAddToCart = (product, e) => {
@@ -70,40 +70,22 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
     setTimeout(() => heart.remove(), 1000);
   };
 
-  return (
-    <div>
-      {/* Filtros */}
-      <div className="filters">
-        <select onChange={(e) => setMaterialFilter(e.target.value)}>
-          <option value="">Todos los materiales</option>
-          <option value="Plata">Plata</option>
-          <option value="Oro">Oro</option>
-          <option value="Cuero">Cuero</option>
-          <option value="Acero inoxidable">Acero inoxidable</option>
-        </select>
+  // Renderizado de productos
+  const renderProducts = (list) => {
+    const filtered = applyFilters(list);
+    return filtered.length === 0 ? (
+      <p>No hay productos que coincidan con tu búsqueda/filtros</p>
+    ) : (
+      <>
+        {/* Mensaje dinámico de rango de precio y cantidad */}
+        {priceFilter > 0 && (
+          <p className="price-message">
+            Mostrando {filtered.length} producto{filtered.length !== 1 ? "s" : ""} hasta RD${priceFilter}
+          </p>
+        )}
 
-        <select onChange={(e) => setPriceFilter(parseInt(e.target.value))}>
-          <option value="0">Todos los precios</option>
-          <option value="5000">Menor a RD$5,000</option>
-          <option value="10000">Menor a RD$10,000</option>
-        </select>
-
-        <label>
-          <input
-            type="checkbox"
-            checked={stockFilter}
-            onChange={(e) => setStockFilter(e.target.checked)}
-          />
-          Solo en stock
-        </label>
-      </div>
-
-      {/* Grid de productos */}
-      <div className="products-grid">
-        {filteredProducts.length === 0 ? (
-          <p>No hay productos que coincidan con tu búsqueda/filtros</p>
-        ) : (
-          filteredProducts.map((product) => (
+        <div className="products-grid">
+          {filtered.map((product) => (
             <div key={product.id} className="product-card">
               <div className="image-container">
                 <Link to={`/product/${product.id}`}>
@@ -140,9 +122,75 @@ function Products({ products, addToCart, toggleWishlist, wishlist, searchTerm })
                   : "🤍 Añadir a favoritos"}
               </button>
             </div>
-          ))
-        )}
+          ))}
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <div>
+      {/* Filtros */}
+      <div className="filters">
+        <select onChange={(e) => setMaterialFilter(e.target.value)}>
+          <option value="">Todos los materiales</option>
+          <option value="Plata">Plata</option>
+          <option value="Oro">Oro</option>
+          <option value="Cuero">Cuero</option>
+          <option value="Acero inoxidable">Acero inoxidable</option>
+        </select>
+
+        {/* Filtro por precio con input y sugerencias */}
+        <label>
+          Precio máximo:
+          <input
+            type="number"
+            list="priceSuggestions"
+            value={priceFilter}
+            onChange={(e) => setPriceFilter(parseInt(e.target.value))}
+            placeholder="Ej: 1500"
+            min="500"
+            max="10000"
+            step="100"
+          />
+          <datalist id="priceSuggestions">
+            <option value="500" />
+            <option value="1000" />
+            <option value="1500" />
+            <option value="2000" />
+            <option value="2500" />
+            <option value="3000" />
+            <option value="4000" />
+            <option value="5000" />
+            <option value="7500" />
+            <option value="10000" />
+          </datalist>
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            checked={stockFilter}
+            onChange={(e) => setStockFilter(e.target.checked)}
+          />
+          Solo en stock
+        </label>
       </div>
+
+      {/* Mostrar productos */}
+      {category ? (
+        // Vista de categoría
+        renderProducts(products.filter((p) => p.category === category))
+      ) : (
+        // Vista de inicio: agrupados por categoría
+        <>
+          <h2>Collares</h2>
+          {renderProducts(products.filter((p) => p.category === "collares"))}
+
+          <h2>Pulseras</h2>
+          {renderProducts(products.filter((p) => p.category === "pulseras"))}
+        </>
+      )}
     </div>
   );
 }

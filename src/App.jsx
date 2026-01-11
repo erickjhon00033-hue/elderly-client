@@ -149,6 +149,7 @@ function App() {
 
       {/* Rutas */}
       <Routes>
+        {/* Inicio: mostrar todos los productos */}
         <Route
           path="/"
           element={
@@ -156,9 +157,18 @@ function App() {
               <h2>Bienvenido a la tienda Elderly</h2>
               <p>Explora nuestros productos artesanales únicos.</p>
               <Categories />
+              <Products
+                products={products}
+                addToCart={addToCart}
+                toggleWishlist={toggleWishlist}
+                wishlist={wishlist}
+                searchTerm={searchTerm}
+              />
             </main>
           }
         />
+
+        {/* Categorías: filtrados */}
         <Route
           path="/:category"
           element={
@@ -171,6 +181,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="/product/:id"
           element={
