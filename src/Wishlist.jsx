@@ -7,11 +7,20 @@ function Wishlist({ wishlist, toggleWishlist }) {
       <h2>Mis Favoritos 💖</h2>
 
       {wishlist.length === 0 ? (
-        <p>No tienes productos en tu lista de favoritos.</p>
+        <div className="empty-wishlist">
+          <h3>💔 No tienes productos en tu lista de favoritos</h3>
+          <p>Explora nuestra colección y agrega tus piezas preferidas.</p>
+          <Link to="/" className="back-button">
+            Explorar productos
+          </Link>
+        </div>
       ) : (
         <div className="wishlist-grid">
           {wishlist.map((product) => (
-            <div key={product.product_id || product.id} className="wishlist-card">
+            <div
+              key={product.product_id || product.id}
+              className="wishlist-card"
+            >
               <div className="image-container">
                 <Link to={`/product/${product.product_id || product.id}`}>
                   <img

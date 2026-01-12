@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import logo from "./assets/Logo.png";
 import Products from "./Products";
 import Cart from "./Cart";
@@ -7,6 +7,8 @@ import ProductDetail from "./ProductDetail";
 import Categories from "./Categories";
 import Wishlist from "./Wishlist";
 import Login from "./Login";
+import Success from "./Success";   // ✅ Stripe success
+import Cancel from "./Cancel";     // ✅ Stripe cancel
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
 import { UserContext } from "./UserContext";
@@ -26,13 +28,21 @@ function App() {
   const { user, login, logout } = useAuth();
 
   // 🛒 Carrito
-  const { cart, loading: cartLoading, addToCart } = useCart();
+  const { cart, loading: cartLoading, addToCart, clearCart, syncCart } = useCart();
 
   // ❤️ Wishlist
-  const { wishlist, loading: wishlistLoading, toggleWishlist } = useWishlist();
+  const { wishlist, loading: wishlistLoading, toggleWishlist, syncWishlist } = useWishlist();
 
   // 📦 Productos
   const { products, loading: productsLoading } = useProducts();
+
+  // 🔄 Sincronizar wishlist y carrito local al hacer login
+  useEffect(() => {
+    if (user) {
+      syncWishlist();
+      syncCart();
+    }
+  }, [user]);
 
   return (
     <div className="app">
@@ -75,11 +85,12 @@ function App() {
 
           <div className="mini-cart">
             <Link to="/cart">
-              🛒 (
-              {cart.reduce((sum, item) => sum + (item.quantity || 1), 0)})
+              🛒 ({cart.reduce((sum, item) => sum + (item.quantity || 1), 0)})
             </Link>
           </div>
-          <Link to="/checkout">Checkout</Link>
+          <Link to="/checkout" className="pay-button-nav">
+  Pagar
+</Link>
         </nav>
       </header>
 
@@ -138,14 +149,14 @@ function App() {
             cartLoading ? (
               <p>Cargando carrito...</p>
             ) : (
-              <Cart cart={cart} clearCart={() => {}} />
+              <Cart cart={cart} clearCart={clearCart} />
             )
           }
         />
 
         <Route
           path="/checkout"
-          element={<Checkout cart={cart} clearCart={() => {}} />}
+          element={<Checkout cart={cart} clearCart={clearCart} />}
         />
 
         <Route
@@ -160,6 +171,10 @@ function App() {
         />
 
         <Route path="/login" element={<Login login={login} />} />
+
+        {/* ✅ Stripe redirecciones */}
+        <Route path="/success" element={<Success />} />
+        <Route path="/cancel" element={<Cancel />} />
       </Routes>
 
       {/* Footer */}

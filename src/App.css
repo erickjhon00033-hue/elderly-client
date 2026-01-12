@@ -928,3 +928,260 @@ footer {
   color: #000000 !important; /* 👈 negro sólido */
   font-weight: 600;
 }
+.pay-button {
+  background: linear-gradient(135deg, #000000, #444444);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pay-button:hover {
+  background: linear-gradient(135deg, #444444, #000000);
+  transform: scale(1.05);
+}
+
+.pay-button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+.pay-button-nav {
+  background: linear-gradient(135deg, #000000, #FFC107); /* dorado */
+  color: #000; /* letras negras */
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 8px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-left: 12px;
+  display: inline-block;
+}
+
+.pay-button-nav:hover {
+  background: linear-gradient(135deg, #FFC107, #FFD700);
+  transform: scale(1.08);
+}
+.success-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  background: #fdfdfd;
+}
+
+.success-card {
+  background: #fff;
+  border: 2px solid #FFD700;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.success-card h2 {
+  color: #2e7d32; /* verde éxito */
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.success-card p {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #FFD700, #FFC107); /* dorado */
+  color: #000; /* letras negras */
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #FFC107, #FFD700);
+  transform: scale(1.08);
+}
+/* ===== Cancel Page Styles ===== */
+.cancel-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  background: #fdfdfd;
+}
+
+.cancel-card {
+  background: #fff;
+  border: 2px solid #dc3545; /* rojo */
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.cancel-card h2 {
+  color: #dc3545; /* rojo cancelación */
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.cancel-card p {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.retry-button {
+  background: linear-gradient(135deg, #ff4d4d, #dc3545); /* rojo degradado */
+  color: #fff; /* letras blancas para contraste */
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.retry-button:hover {
+  background: linear-gradient(135deg, #dc3545, #ff4d4d);
+  transform: scale(1.08);
+}
+.empty-cart {
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-cart h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.empty-cart p {
+  margin-bottom: 20px;
+  color: #555;
+}
+.empty-wishlist {
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-wishlist h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.empty-wishlist p {
+  margin-bottom: 20px;
+  color: #555;
+}
+.heart {
+  font-size: 1.2rem;
+  margin-right: 6px;
+  transition: color 0.3s ease;
+}
+
+.heart.white {
+  color: #ccc; /* gris/blanco */
+}
+
+.heart.red {
+  color: #e63946; /* rojo */
+}
+
+.wishlist-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+/* Botón de favoritos con estilo dorado */
+.wishlist-button {
+  background: linear-gradient(135deg, #FFD700, #FFC107); /* dorado */
+  color: #000; /* letras negras */
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.wishlist-button:hover {
+  background: linear-gradient(135deg, #FFC107, #FFD700);
+  transform: scale(1.05);
+}
+
+/* Corazón dinámico */
+.heart {
+  font-size: 1.2rem;
+  margin-right: 6px;
+  transition: color 0.3s ease;
+}
+
+.heart.white {
+  color: #fff; /* blanco */
+}
+
+.heart.red {
+  color: #e63946; /* rojo */
+}
+/* Estilo dorado unificado para botones de acción */
+.pay-button,
+.wishlist-button {
+  background: linear-gradient(135deg, #FFD700, #FFC107); /* dorado */
+  color: #000; /* letras negras */
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.pay-button:hover,
+.wishlist-button:hover {
+  background: linear-gradient(135deg, #FFC107, #FFD700);
+  transform: scale(1.05);
+}
+
+/* Corazón dinámico dentro del botón de favoritos */
+.heart {
+  font-size: 1.2rem;
+  margin-right: 6px;
+  transition: color 0.3s ease;
+}
+
+.heart.white {
+  color: #fff; /* blanco/gris */
+}
+
+.heart.red {
+  color: #e63946; /* rojo */
+}

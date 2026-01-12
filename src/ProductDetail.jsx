@@ -49,7 +49,9 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
   const getPriceDisplay = (p) =>
     ((p.price_cents || p.price * 100) / 100).toFixed(2);
 
-  const isFavorite = wishlist.some((item) => item.product_id === product.id);
+  const isFavorite = wishlist.some(
+    (item) => item.product_id === product.id || item.id === product.id
+  );
 
   return (
     <div className="product-detail">
@@ -149,10 +151,17 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
         </label>
       </div>
 
-      {/* Botones */}
-      <button onClick={handleAddToCart}>Añadir al carrito</button>
-      <button onClick={() => toggleWishlist(product)}>
-        {isFavorite ? "💖 Quitar de favoritos" : "🤍 Añadir a favoritos"}
+      {/* Botones dorados */}
+      <button className="pay-button" onClick={handleAddToCart}>
+        Añadir al carrito
+      </button>
+
+      <button
+        className="pay-button wishlist-button"
+        onClick={() => toggleWishlist(product)}
+      >
+        <span className={isFavorite ? "heart red" : "heart white"}>♥</span>
+        {isFavorite ? " Quitar de favoritos" : " Añadir a favoritos"}
       </button>
 
       {/* Reseñas */}
@@ -198,7 +207,9 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
               setNewReview({ ...newReview, comment: e.target.value })
             }
           />
-          <button onClick={handleAddReview}>Enviar reseña</button>
+          <button className="pay-button" onClick={handleAddReview}>
+            Enviar reseña
+          </button>
         </div>
       </div>
     </div>

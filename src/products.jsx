@@ -186,7 +186,8 @@ function Products({
         <div className="products-grid">
           {filtered.map((product) => {
             const isFavorite = wishlist.some(
-              (item) => item.product_id === product.id
+              (item) =>
+                item.product_id === product.id || item.id === product.id
             );
 
             return (
@@ -213,20 +214,23 @@ function Products({
                 )}
                 {product.newArrival && <span className="badge new">Nuevo</span>}
 
-                <button onClick={(e) => handleAddToCart(product, e)}>
+                {/* Botón dorado para carrito */}
+                <button className="pay-button" onClick={(e) => handleAddToCart(product, e)}>
                   Añadir al carrito
                 </button>
 
+                {/* Botón dorado para favoritos con corazón dinámico */}
                 <button
                   onClick={(e) => {
                     toggleWishlist(product);
                     showHeartEffect(e);
                   }}
-                  className={isFavorite ? "wishlist-active" : ""}
+                  className="pay-button wishlist-button"
                 >
-                  {isFavorite
-                    ? "💖 Quitar de favoritos"
-                    : "🤍 Añadir a favoritos"}
+                  <span className={isFavorite ? "heart red" : "heart white"}>
+                    ♥
+                  </span>
+                  {isFavorite ? " Quitar de favoritos" : " Añadir a favoritos"}
                 </button>
               </div>
             );
