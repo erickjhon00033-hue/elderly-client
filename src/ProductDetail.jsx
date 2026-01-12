@@ -97,6 +97,14 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist, user }) 
   const isFavorite = wishlist.some(
     (item) => item.product_id === product.id || item.id === product.id
   );
+  // Convertir strings en listas para mostrarlas como arrays
+const featuresList = product.features
+  ? product.features.split(",").map((f) => f.trim()).filter(Boolean)
+  : [];
+
+const materialsList = product.material
+  ? product.material.split(",").map((m) => m.trim()).filter(Boolean)
+  : [];
 
   return (
     <div className="product-detail">
@@ -138,47 +146,47 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist, user }) 
         </select>
       </label>
 
-      {/* Accordion de características */}
-      <div className={`accordion ${featuresOpen ? "open" : ""}`}>
-        <div
-          className="accordion-header"
-          onClick={() => setFeaturesOpen(!featuresOpen)}
-        >
-          {featuresOpen ? "➖ Características" : "➕ Características"}
-        </div>
-        <div className="accordion-content">
-          {product.features && product.features.length > 0 ? (
-            <ul>
-              {product.features.map((f, i) => (
-                <li key={i}>{f}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No hay características registradas.</p>
-          )}
-        </div>
-      </div>
+{/* Accordion de características */}
+<div className={`accordion ${featuresOpen ? "open" : ""}`}>
+  <div
+    className="accordion-header"
+    onClick={() => setFeaturesOpen(!featuresOpen)}
+  >
+    {featuresOpen ? "➖ Características" : "➕ Características"}
+  </div>
+  <div className="accordion-content">
+    {featuresList.length > 0 ? (
+      <ul>
+        {featuresList.map((f, i) => (
+          <li key={i}>{f}</li>
+        ))}
+      </ul>
+    ) : (
+      <p>No hay características registradas.</p>
+    )}
+  </div>
+</div>
 
-      {/* Accordion de materiales */}
-      <div className={`accordion ${materialsOpen ? "open" : ""}`}>
-        <div
-          className="accordion-header"
-          onClick={() => setMaterialsOpen(!materialsOpen)}
-        >
-          {materialsOpen ? "➖ Materiales" : "➕ Materiales"}
-        </div>
-        <div className="accordion-content">
-          {product.materials && product.materials.length > 0 ? (
-            <ul>
-              {product.materials.map((m, i) => (
-                <li key={i}>{m}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No hay materiales registrados.</p>
-          )}
-        </div>
-      </div>
+{/* Accordion de materiales */}
+<div className={`accordion ${materialsOpen ? "open" : ""}`}>
+  <div
+    className="accordion-header"
+    onClick={() => setMaterialsOpen(!materialsOpen)}
+  >
+    {materialsOpen ? "➖ Materiales" : "➕ Materiales"}
+  </div>
+  <div className="accordion-content">
+    {materialsList.length > 0 ? (
+      <ul>
+        {materialsList.map((m, i) => (
+          <li key={i}>{m}</li>
+        ))}
+      </ul>
+    ) : (
+      <p>No hay materiales registrados.</p>
+    )}
+  </div>
+</div>
 
       <p>Stock disponible: {product.stock}</p>
 
