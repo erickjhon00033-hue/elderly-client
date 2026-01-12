@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { productsFallback } from "./Products"; // ✅ fallback local
 
-function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
+function ProductDetail({ products, addToCart, toggleWishlist, wishlist, user }) {
   const { id } = useParams();
 
   // Usa productos de props (backend) o fallback local
@@ -22,23 +22,68 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
   );
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
-  const [reviews, setReviews] = useState([
-    { user: "Ana", rating: 5, comment: "Hermoso producto, muy elegante." },
-    { user: "Carlos", rating: 4, comment: "Buena calidad, llegó rápido." },
-  ]);
+
+  // 🔥 reseñas desde backend
+  const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({ rating: 0, comment: "" });
+  const [reviewError, setReviewError] = useState(""); // mensaje de error
 
   const [featuresOpen, setFeaturesOpen] = useState(false);
   const [materialsOpen, setMaterialsOpen] = useState(false);
+
+  // Cargar reseñas al montar
+  useEffect(() => {
+    async function loadReviews() {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE}/api/reviews/${product.id}`
+        );
+        const data = await res.json();
+        setReviews(data);
+      } catch (err) {
+        console.error("Error cargando reseñas:", err);
+      }
+    }
+    loadReviews();
+  }, [product.id]);
 
   const handleAddToCart = () => {
     addToCart({ ...product, quantity, size: selectedSize });
   };
 
-  const handleAddReview = () => {
+  // Enviar reseña al backend
+  const handleAddReview = async () => {
     if (newReview.rating > 0 && newReview.comment.trim() !== "") {
-      setReviews([...reviews, { user: "Cliente", ...newReview }]);
-      setNewReview({ rating: 0, comment: "" });
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE}/api/reviews/${product.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user?.token}`, // token del login
+            },
+            body: JSON.stringify(newReview),
+          }
+        );
+        const data = await res.json();
+
+        if (res.status === 403) {
+          setReviewError(data.message); // mensaje del backend
+          return;
+        }
+
+        if (data.success) {
+          setReviews(data.reviews);
+          setNewReview({ rating: 0, comment: "" });
+          setReviewError(""); // limpiar error si todo salió bien
+        } else {
+          setReviewError(data.message || "Error enviando reseña");
+        }
+      } catch (err) {
+        console.error("Error enviando reseña:", err);
+        setReviewError("Error de conexión con el servidor");
+      }
     }
   };
 
@@ -178,7 +223,7 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
           <h3>Opiniones de clientes</h3>
           {reviews.map((r, i) => (
             <div key={i} className="review">
-              <strong>{r.user}</strong> — {renderStars(r.rating)}
+              <strong>{r.user_email || r.user}</strong> — {renderStars(r.rating)}
               <p>{r.comment}</p>
             </div>
           ))}
@@ -210,6 +255,11 @@ function ProductDetail({ products, addToCart, toggleWishlist, wishlist }) {
           <button className="pay-button" onClick={handleAddReview}>
             Enviar reseña
           </button>
+
+          {/* Mensaje de error */}
+          {reviewError && (
+            <p style={{ color: "red", marginTop: "10px" }}>{reviewError}</p>
+          )}
         </div>
       </div>
     </div>
