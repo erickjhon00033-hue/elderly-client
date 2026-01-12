@@ -29,7 +29,15 @@ function App() {
   const { user, login, logout } = useAuth();
 
   // 🛒 Carrito
-  const { cart, loading: cartLoading, addToCart, clearCart, syncCart } = useCart();
+  const {
+    cart,
+    loading: cartLoading,
+    addToCart,
+    clearCart,
+    syncCart,
+    updateQuantity,
+    removeFromCart,
+  } = useCart();
 
   // ❤️ Wishlist
   const { wishlist, loading: wishlistLoading, toggleWishlist, syncWishlist } = useWishlist();
@@ -157,6 +165,7 @@ function App() {
               addToCart={addToCart}
               toggleWishlist={toggleWishlist}
               wishlist={wishlist}
+              user={user}
             />
           }
         />
@@ -167,7 +176,12 @@ function App() {
             cartLoading ? (
               <p>Cargando carrito...</p>
             ) : (
-              <Cart cart={cart} clearCart={clearCart} />
+              <Cart
+                cart={cart}
+                updateQuantity={updateQuantity}
+                removeFromCart={removeFromCart}
+                clearCart={clearCart}
+              />
             )
           }
         />
@@ -203,7 +217,11 @@ function App() {
           path="/admin"
           element={
             adminToken ? (
-              <AdminDashboard user={adminUser} token={adminToken} onLogout={handleAdminLogout} />
+              <AdminDashboard
+                user={adminUser}
+                token={adminToken}
+                onLogout={handleAdminLogout}
+              />
             ) : (
               <LoginAdmin onLogin={handleAdminLogin} />
             )
