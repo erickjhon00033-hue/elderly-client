@@ -74,6 +74,16 @@ function App() {
       {/* Header */}
       <header className={isHome ? "header header--home" : "header"}>
         <div className="header-brand">
+          {/* 👤 Usuario en esquina superior izquierda */}
+          {user && (
+            <div className="user-top-left">
+              <span className="user-info">👤 {user.email}</span>
+              <button onClick={logout} className="logout-button">
+                Cerrar sesión
+              </button>
+            </div>
+          )}
+
           <Link to="/">
             <img src={logo} alt="Logo Elderly" />
           </Link>
@@ -91,16 +101,7 @@ function App() {
           <Link to="/wishlist">Favoritos</Link>
           <Link to="/admin/login">Admin</Link> {/* 👈 acceso admin */}
 
-          {user ? (
-            <>
-              <span className="user-info">👤 {user.email}</span>
-              <button onClick={logout} className="logout-button">
-                Cerrar sesión
-              </button>
-            </>
-          ) : (
-            <Link to="/login">Login / Registro</Link>
-          )}
+          {!user && <Link to="/login">Login / Registro</Link>}
 
           <input
             type="text"

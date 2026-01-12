@@ -1,14 +1,19 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "./UserContext";
+import { setToken, setUser as setUserLocal } from "./config"; 
+import { useCart } from "./hooks/useCart"; 
 
 function Login() {
   const userContext = useContext(UserContext);
-  const setUser = userContext?.setUser; // acceso seguro al contexto
+  const setUser = userContext?.setUser; 
+
+  const { syncCartLocalToBackend } = useCart(); 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showRegister, setShowRegister] = useState(false);
 
+  // 🔑 Login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -19,23 +24,34 @@ function Login() {
       });
       const data = await response.json();
 
-      if (data.token && setUser) {
-        // Guardar token en localStorage
-        localStorage.setItem("token", data.token);
+      console.log("Respuesta backend login:", data);
 
-        // Actualizar contexto de usuario
-        setUser({ email: data.user.email, token: data.token });
+      // ✅ Ajuste: usar directamente data.user y fallback si no existe
+if (data.success && data.token) {
+  setToken(data.token);
 
-        alert("✅ Sesión iniciada correctamente");
-      } else {
-        alert("Credenciales incorrectas");
-      }
+  // ✅ Usa directamente data.user, con fallback mínimo
+  const userData = data.user || { email };
+
+  setUserLocal(userData);
+  if (setUser) {
+    setUser({ email: userData.email, token: data.token });
+  }
+
+  await syncCartLocalToBackend();
+
+  alert("✅ Sesión iniciada correctamente");
+  window.location.href = "/";
+} else {
+  alert(data.message || "Credenciales incorrectas");
+}
     } catch (error) {
       console.error("Error en login:", error);
       alert("Error de conexión con el servidor");
     }
   };
 
+  // 📝 Registro
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -46,11 +62,13 @@ function Login() {
       });
       const data = await response.json();
 
+      console.log("Respuesta backend register:", data);
+
       if (data.success) {
         alert("✅ Cuenta creada, ahora inicia sesión");
         setShowRegister(false);
       } else {
-        alert("Error al registrarse");
+        alert(data.message || "Error al registrarse");
       }
     } catch (error) {
       console.error("Error en registro:", error);
