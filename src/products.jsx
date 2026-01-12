@@ -311,17 +311,12 @@ function Products({
       </div>
 
       {/* Mostrar productos */}
-      {category ? (
-        renderProducts(listSource.filter((p) => p.category === category))
-      ) : (
-        <>
-          <h2>Collares</h2>
-          {renderProducts(listSource.filter((p) => p.category === "collares"))}
-
-          <h2>Pulseras</h2>
-          {renderProducts(listSource.filter((p) => p.category === "pulseras"))}
-        </>
-      )}
+{/* Mostrar productos */}
+{category ? (
+  renderProducts(listSource.filter((p) => p.category === category))
+) : (
+  renderProducts(listSource) // 👈 ahora en el home se muestran todos juntos
+)}
     </div>
   );
 }

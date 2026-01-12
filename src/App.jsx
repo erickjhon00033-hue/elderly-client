@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "./assets/Logo.png";
 import Products from "./Products";
 import Cart from "./Cart";
@@ -11,7 +11,8 @@ import Success from "./Success";   // ✅ Stripe success
 import Cancel from "./Cancel";     // ✅ Stripe cancel
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
-import { UserContext } from "./UserContext";
+import AdminDashboard from "./admin/AdminDashboard";
+import LoginAdmin from "./admin/LoginAdmin"; // 👈 login admin
 
 // 👉 Hooks conectados al backend
 import { useAuth } from "./hooks/useAuth";
@@ -24,7 +25,7 @@ function App() {
   const isHome = location.pathname === "/";
   const [searchTerm, setSearchTerm] = useState("");
 
-  // 🔑 Autenticación
+  // 🔑 Autenticación usuario normal
   const { user, login, logout } = useAuth();
 
   // 🛒 Carrito
@@ -43,6 +44,22 @@ function App() {
       syncCart();
     }
   }, [user]);
+
+  // 🔑 Estado para admin
+  const [adminToken, setAdminToken] = useState(localStorage.getItem("adminToken") || "");
+  const [adminUser, setAdminUser] = useState(null);
+
+  const handleAdminLogin = (token, userData) => {
+    localStorage.setItem("adminToken", token);
+    setAdminToken(token);
+    setAdminUser(userData);
+  };
+
+  const handleAdminLogout = () => {
+    localStorage.removeItem("adminToken");
+    setAdminToken("");
+    setAdminUser(null);
+  };
 
   return (
     <div className="app">
@@ -64,6 +81,7 @@ function App() {
           <Link to="/collares">Collares</Link>
           <Link to="/pulseras">Pulseras</Link>
           <Link to="/wishlist">Favoritos</Link>
+          <Link to="/admin/login">Admin</Link> {/* 👈 acceso admin */}
 
           {user ? (
             <>
@@ -89,8 +107,8 @@ function App() {
             </Link>
           </div>
           <Link to="/checkout" className="pay-button-nav">
-  Pagar
-</Link>
+            Pagar
+          </Link>
         </nav>
       </header>
 
@@ -175,6 +193,22 @@ function App() {
         {/* ✅ Stripe redirecciones */}
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
+
+        {/* Admin */}
+        <Route
+          path="/admin/login"
+          element={<LoginAdmin onLogin={handleAdminLogin} />}
+        />
+        <Route
+          path="/admin"
+          element={
+            adminToken ? (
+              <AdminDashboard user={adminUser} token={adminToken} onLogout={handleAdminLogout} />
+            ) : (
+              <LoginAdmin onLogin={handleAdminLogin} />
+            )
+          }
+        />
       </Routes>
 
       {/* Footer */}
