@@ -1,13 +1,14 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "./UserContext";
-import { setToken, setUser as setUserLocal } from "./config"; 
-import { useCart } from "./hooks/useCart"; 
+import { setToken, setUser as setUserLocal } from "./config";
+import { useCart } from "./hooks/useCart";
 
 function Login() {
   const userContext = useContext(UserContext);
-  const setUser = userContext?.setUser; 
+  const setUser = userContext?.setUser;
 
-  const { syncCartLocalToBackend } = useCart(); 
+  // ✅ Ahora usamos syncCart en lugar de syncCartLocalToBackend
+  const { syncCart } = useCart();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,25 +27,25 @@ function Login() {
 
       console.log("Respuesta backend login:", data);
 
-      // ✅ Ajuste: usar directamente data.user y fallback si no existe
-if (data.success && data.token) {
-  setToken(data.token);
+      if (data.success && data.token) {
+        setToken(data.token);
 
-  // ✅ Usa directamente data.user, con fallback mínimo
-  const userData = data.user || { email };
+        // ✅ Usa directamente data.user, con fallback mínimo
+        const userData = data.user || { email };
 
-  setUserLocal(userData);
-  if (setUser) {
-    setUser({ email: userData.email, token: data.token });
-  }
+        setUserLocal(userData);
+        if (setUser) {
+          setUser({ email: userData.email, token: data.token });
+        }
 
-  await syncCartLocalToBackend();
+        // ✅ Cambio aquí
+        await syncCart();
 
-  alert("✅ Sesión iniciada correctamente");
-  window.location.href = "/";
-} else {
-  alert(data.message || "Credenciales incorrectas");
-}
+        alert("✅ Sesión iniciada correctamente");
+        window.location.href = "/";
+      } else {
+        alert(data.message || "Credenciales incorrectas");
+      }
     } catch (error) {
       console.error("Error en login:", error);
       alert("Error de conexión con el servidor");
