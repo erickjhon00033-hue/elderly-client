@@ -20,7 +20,7 @@ export function useWishlist() {
 
         // Usuario logueado → cargar desde backend
         const res = await apiFetch("/api/wishlist");
-        setWishlist(res.data || []);
+        setWishlist(res.wishlist || res.data || []);
       } catch (err) {
         console.error("Error al cargar wishlist:", err);
         setWishlist([]);
@@ -58,11 +58,17 @@ export function useWishlist() {
       body: JSON.stringify({ product_id: product.id || product.product_id }),
     });
 
-    // El backend devuelve { success, action, wishlistId? }
     if (res.success) {
-      // Recargar wishlist desde backend
-      const updated = await apiFetch("/api/wishlist");
-      setWishlist(updated.data || []);
+      // ✅ Actualizar directamente según acción
+      if (res.action === "added") {
+        setWishlist([...wishlist, product]);
+      } else if (res.action === "removed") {
+        setWishlist(wishlist.filter((item) => item.id !== product.id));
+      } else {
+        // fallback: recargar desde backend
+        const updated = await apiFetch("/api/wishlist");
+        setWishlist(updated.wishlist || updated.data || []);
+      }
     }
   }
 
@@ -76,7 +82,7 @@ export function useWishlist() {
 
     await apiFetch(`/api/wishlist/${productId}`, { method: "DELETE" });
     const updated = await apiFetch("/api/wishlist");
-    setWishlist(updated.data || []);
+    setWishlist(updated.wishlist || updated.data || []);
   }
 
   // Vaciar wishlist
@@ -106,7 +112,7 @@ export function useWishlist() {
       });
       localStorage.removeItem("wishlist"); // limpiar localStorage
       const updated = await apiFetch("/api/wishlist");
-      setWishlist(updated.data || []);
+      setWishlist(updated.wishlist || updated.data || []);
     }
   }
 
