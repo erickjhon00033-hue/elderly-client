@@ -236,7 +236,7 @@ function App() {
           <div>
             <h4>Contacto</h4>
             <p>Email: contacto@elderly.com</p>
-            <p>Tel: +1 809 000 0000</p>
+            
           </div>
           <div>
             <h4>Redes</h4>
