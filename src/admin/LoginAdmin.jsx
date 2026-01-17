@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function LoginAdmin({ onLogin }) {
-  const [email, setEmail] = useState("admin@elderly.com"); // 👈 puedes dejarlo fijo
+  const [email, setEmail] = useState("admin@elderly.com"); // 👈 fijo para admin
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -13,13 +13,19 @@ function LoginAdmin({ onLogin }) {
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
       if (data.success) {
-        localStorage.setItem("adminToken", data.token); // guardar token
-        onLogin(data.token, data.user); // pasar token y datos al App
+        // ✅ guardar token con la misma clave que usa el dashboard
+        localStorage.setItem("token", data.token);
+
+        // ✅ pasar token y datos al App
+        onLogin(data.token, data.user);
+
+        // ✅ redirigir al dashboard
+        window.location.href = "/admin";
       } else {
         setError(data.message || "Login fallido ❌");
       }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function ProductForm({ user, token, editing, setEditing, onSuccess }) {
+function ProductForm({ token, editing, setEditing, onSuccess }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -8,8 +8,6 @@ function ProductForm({ user, token, editing, setEditing, onSuccess }) {
   const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("");
   const [material, setMaterial] = useState("");
-  const [features, setFeatures] = useState("");
-  const [size, setSize] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -22,8 +20,6 @@ function ProductForm({ user, token, editing, setEditing, onSuccess }) {
       setImageUrl(editing.image_url || "");
       setCategory(editing.category || "");
       setMaterial(editing.material || "");
-      setFeatures(editing.features || "");
-      setSize(editing.size || "");
     }
   }, [editing]);
 
@@ -41,8 +37,6 @@ function ProductForm({ user, token, editing, setEditing, onSuccess }) {
         image_url: imageUrl,
         category,
         material,
-        features,
-        size,
       };
 
       const url = editing
@@ -55,14 +49,14 @@ function ProductForm({ user, token, editing, setEditing, onSuccess }) {
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token || user?.token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
 
       const data = await res.json();
       if (data.success) {
-        setSuccess(editing ? "✅ Producto actualizado correctamente" : "✅ Producto creado correctamente");
+        setSuccess(data.message || (editing ? "✅ Producto actualizado" : "✅ Producto creado"));
         if (!editing) {
           setName("");
           setDescription("");
@@ -71,8 +65,6 @@ function ProductForm({ user, token, editing, setEditing, onSuccess }) {
           setImageUrl("");
           setCategory("");
           setMaterial("");
-          setFeatures("");
-          setSize("");
         }
         setEditing(null);
         onSuccess && onSuccess();
@@ -163,32 +155,6 @@ function ProductForm({ user, token, editing, setEditing, onSuccess }) {
             onChange={(e) => setMaterial(e.target.value)}
             placeholder="Ej: Plata, Oro, Cuero..."
           />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium">Características:</label>
-          <textarea
-            className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500"
-            value={features}
-            onChange={(e) => setFeatures(e.target.value)}
-            placeholder="Ej: Hecho a mano, resistente al agua..."
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium">Tamaño:</label>
-          <select
-            className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500"
-            value={size}
-            onChange={(e) => setSize(e.target.value)}
-            required
-          >
-            <option value="">Selecciona un tamaño</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-          </select>
         </div>
 
         <div className="flex space-x-4">

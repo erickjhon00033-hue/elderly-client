@@ -1,79 +1,99 @@
 import React, { useState } from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
-import { useProducts } from "../hooks/useProducts";
+import AdminOrders from "./AdminOrders";
+import AdminReviews from "./AdminReviews";
 
-function AdminDashboard({ user, token }) {
+function AdminDashboard({ user, token, onLogout }) {
   const [editing, setEditing] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [activeTab, setActiveTab] = useState("products"); // 👈 controla la vista activa
 
-  // 👉 Hook de productos con refreshTrigger
-  const { products, loading, error } = useProducts(refreshTrigger);
+  const handleLogout = () => {
+    // ✅ Borra token y llama callback
+    localStorage.removeItem("token");
+    onLogout && onLogout();
+    window.location.href = "/admin/login"; // redirige al login
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          Panel de Administración Elderly
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Aquí podrás crear, editar y eliminar productos sin tocar código.
-        </p>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Panel de Administración Elderly
+            </h1>
+            <p className="text-gray-600">
+              Aquí podrás crear, editar y eliminar productos, revisar pedidos y gestionar reseñas.
+            </p>
+          </div>
+          {/* Botón de cerrar sesión */}
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+          >
+            🚪 Cerrar sesión
+          </button>
+        </div>
 
         {/* Menú de navegación */}
         <nav className="mb-8">
           <ul className="flex space-x-6 text-lg font-medium text-gray-700">
             <li>
-              <a
-                href="/admin/products"
-                className="hover:text-yellow-600 transition-colors"
+              <button
+                onClick={() => setActiveTab("products")}
+                className={`transition-colors ${
+                  activeTab === "products" ? "text-yellow-600 font-bold" : "hover:text-yellow-600"
+                }`}
               >
                 🛒 Gestionar productos
-              </a>
+              </button>
             </li>
             <li>
-              <a
-                href="/admin/orders"
-                className="hover:text-yellow-600 transition-colors"
+              <button
+                onClick={() => setActiveTab("orders")}
+                className={`transition-colors ${
+                  activeTab === "orders" ? "text-yellow-600 font-bold" : "hover:text-yellow-600"
+                }`}
               >
                 📦 Ver pedidos
-              </a>
+              </button>
             </li>
             <li>
-              <a
-                href="/admin/reviews"
-                className="hover:text-yellow-600 transition-colors"
+              <button
+                onClick={() => setActiveTab("reviews")}
+                className={`transition-colors ${
+                  activeTab === "reviews" ? "text-yellow-600 font-bold" : "hover:text-yellow-600"
+                }`}
               >
                 ⭐ Reseñas
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
 
-        {/* Formulario para crear/editar productos */}
-        <div className="mb-10">
-          <ProductForm
-            user={user}
-            token={token}
-            editing={editing}
-            setEditing={setEditing}
-            onSuccess={() => setRefreshTrigger(refreshTrigger + 1)}
-          />
-        </div>
-
-        {/* Lista de productos */}
-        <div>
-          {loading && <p>Cargando productos...</p>}
-          {error && <p className="text-red-600">Error: {error}</p>}
-          {!loading && !error && (
+        {/* Contenido dinámico */}
+        {activeTab === "products" && (
+          <>
+            <div className="mb-10">
+              <ProductForm
+                token={token}
+                editing={editing}
+                setEditing={setEditing}
+                onSuccess={() => setRefreshTrigger(refreshTrigger + 1)}
+              />
+            </div>
             <ProductList
-              products={products}
               token={token}
               onEdit={setEditing}
-              onChange={() => setRefreshTrigger(refreshTrigger + 1)}
+              refreshTrigger={refreshTrigger}
             />
-          )}
-        </div>
+          </>
+        )}
+
+        {activeTab === "orders" && <AdminOrders token={token} />}
+        {activeTab === "reviews" && <AdminReviews token={token} />}
       </div>
     </div>
   );

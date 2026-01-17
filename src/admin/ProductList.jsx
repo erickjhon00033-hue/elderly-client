@@ -13,11 +13,15 @@ function ProductList({ token, onEdit, refreshTrigger }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:4000/api/products");
+      const res = await fetch("http://localhost:4000/api/admin/products", {
+        headers: {
+          Authorization: `Bearer ${token}`, // 👈 importante para rutas admin
+        },
+      });
       const data = await res.json();
 
-      if (data.success && Array.isArray(data.data)) {
-        setProducts(data.data); // 👈 siempre usamos el array correcto
+      if (data.success && Array.isArray(data.products)) {
+        setProducts(data.products); // 👈 ahora usamos el array correcto
       } else {
         setProducts([]);
         setError("No se pudieron cargar los productos");
